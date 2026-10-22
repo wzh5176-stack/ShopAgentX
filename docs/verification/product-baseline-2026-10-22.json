@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-22",
+  "timezone": "Asia/Hong_Kong",
+  "source": "User terminal output from Linux python3 scripts/measure_products.py; assistant reviewed script but did not independently repeat measurement",
+  "environment": {
+    "host": "Ubuntu 24.04.5 LTS VMware guest",
+    "kernel": "6.8.0-147-generic",
+    "vcpus": 2,
+    "configured_ram_gib": 4,
+    "reported_total_ram_gib": 3.8,
+    "client_python": "3.12.3",
+    "path": "VM loopback -> Nginx -> two Java instances -> MySQL",
+    "total_products": 6,
+    "on_sale_products": 4,
+    "cluster_and_restore_labs": "stopped"
+  },
+  "result": {
+    "url": "http://127.0.0.1:8080/api/products?page=1&size=10",
+    "concurrency": 1,
+    "warmup_requests": 5,
+    "measured_requests": 30,
+    "successes": 30,
+    "failures": 0,
+    "success_rate_percent": 100,
+    "mean_ms": 9.89,
+    "p50_ms": 9.14,
+    "p95_ms": 14.94,
+    "max_ms": 17.49,
+    "elapsed_seconds": 0.297,
+    "observed_successful_rps": 101.08,
+    "upstream_counts": {
+      "172.19.0.5:8888": 15,
+      "172.19.0.6:8888": 15
+    },
+    "errors": []
+  },
+  "methodology": {
+    "warmup_included": false,
+    "connection_pool": false,
+    "success": "HTTP 200 and JSON data object with items list",
+    "latency": "Client HTTP open, read, JSON parse and response close, measured with perf_counter; successful requests only",
+    "p95": "nearest rank ceil(n * 0.95)",
+    "rps": "successful requests divided by unrounded measured wall-clock duration"
+  },
+  "limits": [
+    "30 sequential requests at concurrency 1 only",
+    "No raw per-request latency list retained",
+    "No maximum-capacity or high-concurrency claim",
+    "No single-instance vs dual-instance comparison",
+    "No Windows tunnel/browser/internet/model latency included",
+    "No fixed upstream IP guarantee"
+  ]
+}
+

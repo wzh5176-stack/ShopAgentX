@@ -1,0 +1,23 @@
+name: shopagent-runtime
+
+services:
+  mysql:
+    image: mysql:8.4.11
+    environment:
+      MYSQL_DATABASE: shopagent
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+    secrets:
+      - mysql_root_password
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+
+secrets:
+  mysql_root_password:
+    file: ../secrets/mysql-root-password.txt

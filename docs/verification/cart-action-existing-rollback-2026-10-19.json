@@ -1,0 +1,102 @@
+{
+  "scope": "existing committed PENDING operation; faulting actual implementation through its transaction proxy with NO surrounding test transaction; three failure points",
+  "checks": [
+    {
+      "name": "practice login",
+      "passed": true
+    },
+    {
+      "name": "created UUID 13862b8a",
+      "passed": true
+    },
+    {
+      "name": "cart_readback_existing_throws",
+      "passed": true
+    },
+    {
+      "name": "cart_readback_existing_cart_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "cart_readback_existing_action_unchanged",
+      "passed": true
+    },
+    {
+      "name": "finish_before_existing_throws",
+      "passed": true
+    },
+    {
+      "name": "finish_before_existing_cart_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "finish_before_existing_action_unchanged",
+      "passed": true
+    },
+    {
+      "name": "finish_after_existing_throws",
+      "passed": true
+    },
+    {
+      "name": "finish_after_existing_cart_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "finish_after_existing_action_unchanged",
+      "passed": true
+    },
+    {
+      "name": "all faults retain original PENDING record and empty cart",
+      "passed": true
+    },
+    {
+      "name": "normal HTTP retry after faults succeeds",
+      "passed": true
+    },
+    {
+      "name": "app_users_baseline_unchanged",
+      "passed": true
+    },
+    {
+      "name": "products_baseline_unchanged",
+      "passed": true
+    },
+    {
+      "name": "chat_conversations_baseline_unchanged",
+      "passed": true
+    },
+    {
+      "name": "chat_messages_baseline_unchanged",
+      "passed": true
+    },
+    {
+      "name": "cart_items_baseline_unchanged",
+      "passed": true
+    },
+    {
+      "name": "cart_actions_baseline_unchanged",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "created_action_ids": [
+    "13862b8a-df64-4137-b52b-47f582cde300"
+  ],
+  "paid_model_calls": 0,
+  "retained_operation_id": "13862b8a-df64-4137-b52b-47f582cde300",
+  "final": {
+    "app_users_baseline_unchanged": true,
+    "products_baseline_unchanged": true,
+    "chat_conversations_baseline_unchanged": true,
+    "chat_messages_baseline_unchanged": true,
+    "cart_items_baseline_unchanged": true,
+    "cart_actions_baseline_unchanged": true,
+    "retained_action_ids": [
+      "13862b8a-df64-4137-b52b-47f582cde300"
+    ]
+  },
+  "check_count": 19,
+  "passed_count": 19,
+  "status": "passed",
+  "owned_processes_stopped": true
+}

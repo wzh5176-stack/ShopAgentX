@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1d5645">
+  <meta name="description" content="告诉 ShopAgent 你的购物需求，查看有依据的商品推荐。">
+  <title>ShopAgent · 让选择更有依据</title>
+  <link rel="icon" type="image/svg+xml" href="./mark.svg">
+  <link rel="stylesheet" href="./app.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#ask">跳到需求输入</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="./index.html" aria-label="ShopAgent 首页">
+        <img src="./mark.svg" width="34" height="34" alt="">
+        <span>Shop<span class="brand-light">Agent</span><span class="brand-dot">.</span></span>
+      </a>
+      <nav aria-label="主导航">
+        <a class="nav-link" href="#discover">发现好物</a>
+        <a class="nav-link" href="#ask">AI 导购</a>
+      </nav>
+      <span class="header-note"><span class="status-dot"></span>让选择更有依据</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="tiny-star">✦</span> YOUR PERSONAL SHOPPING GUIDE</p>
+        <h1 id="hero-title">选对好物，<br>从<span class="hero-highlight">一句话</span>开始。</h1>
+        <p class="hero-description">告诉我你想买什么、预算多少。<br>从真实商品中，为你找到值得考虑的选择。</p>
+        <div class="hero-points">
+          <span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 10 3 3 7-7"/></svg>真实商品</span>
+          <span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 10 3 3 7-7"/></svg>理由清楚</span>
+          <span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 10 3 3 7-7"/></svg>预算可见</span>
+        </div>
+        <div class="hero-caption"><span class="caption-line"></span>好选择，从了解你的需求开始</div>
+      </div>
+
+      <div class="ask-panel" id="ask">
+        <div class="ask-panel-top">
+          <span class="assistant-icon" aria-hidden="true">✦</span>
+          <div><p class="panel-kicker">问问 ShopAgent</p><h2>今天，想找点什么？</h2></div>
+          <span class="small-label">AI 导购</span>
+        </div>
+        <form id="ask-form">
+          <label class="sr-only" for="question">你的购物需求</label>
+          <textarea id="question" name="question" rows="3" maxlength="1000" required
+            placeholder="例如：想买一双500元以内的跑鞋，用来日常跑步。"
+            aria-describedby="question-hint"></textarea>
+          <div class="input-bottom"><span id="question-hint">品类、预算，描述越清楚越好</span><span id="question-count">0 / 1000</span></div>
+          <p class="try-label">还没想好？试试这样问</p>
+          <div class="suggestions" aria-label="需求示例">
+            <button type="button" data-question="想买500元以内的跑鞋，用来日常跑步。">500元以内的跑鞋 <span>↗</span></button>
+            <button type="button" data-question="想找一副耳机，最高预算800元。">一副日常用的耳机 <span>↗</span></button>
+            <button type="button" data-question="想买无线鼠标，最高预算200元。">200元以内的鼠标 <span>↗</span></button>
+          </div>
+          <button class="primary-button ask-submit" id="ask-submit" type="submit">
+            <span class="button-spark" aria-hidden="true">✦</span>
+            <span id="submit-label">帮我选一选</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>
+          </button>
+        </form>
+        <p class="panel-footnote"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m8 1 5 2v4c0 3-5 6-5 6S3 10 3 7V3Z"/><path d="m5.5 7 1.5 1.5L10.5 5"/></svg>商品和价格来自当前商品库</p>
+      </div>
+    </section>
+
+    <section class="shell recommendation-section" id="recommendations" hidden aria-labelledby="recommendation-title" aria-busy="false">
+      <div class="section-heading">
+        <div><p class="eyebrow">PICKED FOR YOUR NEEDS</p><h2 id="recommendation-title">为你挑选</h2></div>
+        <button class="text-button" id="edit-question" type="button">调整需求 <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="condition-tags" id="conditions"></div>
+      <div class="answer-panel" id="answer-panel" role="status" aria-live="polite">
+        <span class="answer-icon" aria-hidden="true">✦</span>
+        <div><p class="answer-label" id="answer-label">ShopAgent 的建议</p><p id="answer-text"></p></div>
+      </div>
+      <div id="recommendation-grid" class="product-grid recommendation-grid"></div>
+      <div class="error-actions" id="recommendation-retry" hidden><button class="secondary-button" type="button" id="retry-ask">重新提交</button></div>
+    </section>
+
+    <section class="shell catalog-section" id="discover" aria-labelledby="catalog-title">
+      <div class="section-heading catalog-heading">
+        <div><p class="eyebrow">A LITTLE DISCOVERY</p><h2 id="catalog-title">发现好物<span id="catalog-total" class="count-badge" hidden></span></h2></div>
+        <p class="section-description">先看看商品，也许灵感就在这里。</p>
+      </div>
+      <div class="catalog-toolbar">
+        <div class="filter-tabs" aria-label="商品关键词筛选">
+          <button type="button" class="filter-tab is-active" data-keyword="" aria-pressed="true">全部商品</button>
+          <button type="button" class="filter-tab" data-keyword="跑鞋" aria-pressed="false">跑鞋</button>
+          <button type="button" class="filter-tab" data-keyword="耳机" aria-pressed="false">耳机</button>
+          <button type="button" class="filter-tab" data-keyword="鼠标" aria-pressed="false">鼠标</button>
+        </div>
+        <form class="catalog-search" id="catalog-search-form" role="search" aria-label="搜索商品">
+          <label class="sr-only" for="catalog-keyword">搜索商品名称或品牌</label>
+          <input id="catalog-keyword" name="keyword" maxlength="50" placeholder="搜索商品名称或品牌">
+          <button type="submit" aria-label="搜索商品"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg></button>
+        </form>
+      </div>
+      <p id="catalog-status" class="catalog-status" role="status" aria-live="polite">正在读取商品…</p>
+      <div class="product-grid" id="catalog-grid" aria-busy="true"></div>
+      <div class="catalog-retry" id="catalog-retry" hidden><button class="secondary-button" type="button" id="retry-catalog">重新读取商品</button></div>
+      <nav class="pagination" id="pagination" aria-label="商品分页" hidden>
+        <button class="secondary-button" type="button" id="previous-page">上一页</button>
+        <span id="page-label"></span>
+        <button class="secondary-button" type="button" id="next-page">下一页</button>
+      </nav>
+      <div class="catalog-bottom"><span class="small-leaf" aria-hidden="true">✦</span><p>少一点盲选，多一点依据。</p><a href="#ask">让 ShopAgent 帮你选 <span aria-hidden="true">↗</span></a></div>
+    </section>
+  </main>
+
+  <footer class="site-footer shell">
+    <a class="footer-brand" href="./index.html">ShopAgent<span>.</span></a>
+    <p>从真实商品出发，让每次选择更清楚。</p>
+    <a href="#ask">回到导购 <span aria-hidden="true">↑</span></a>
+  </footer>
+
+  <dialog id="product-dialog" aria-labelledby="detail-title">
+    <button class="dialog-close" id="close-detail" type="button" aria-label="关闭商品详情">×</button>
+    <div id="detail-body"></div>
+  </dialog>
+  <noscript><div class="noscript-note">请启用浏览器 JavaScript，以查看商品和使用导购。</div></noscript>
+</body>
+</html>
+

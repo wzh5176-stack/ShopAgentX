@@ -1,0 +1,25 @@
+server:
+  port: 8888
+  address: 127.0.0.1
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONID
+
+spring:
+  profiles:
+    default: local
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/shopagent?characterEncoding=UTF-8&connectionTimeZone=Asia/Shanghai
+    username: shopagent_app
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      connect-timeout: 2s
+      timeout: 2s
+  session:
+    timeout: 30m
+    data:
+      redis:
+        namespace: shopagent:session

@@ -1,0 +1,26 @@
+server:
+  address: 0.0.0.0
+  port: 8888
+  forward-headers-strategy: framework
+
+spring:
+  config:
+    import: "configtree:/run/secrets/"
+  datasource:
+    url: "jdbc:mysql://mysql:3306/shopagent?characterEncoding=UTF-8&connectionTimeZone=Asia/Shanghai"
+    username: shopagent_app
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+  data:
+    redis:
+      host: redis
+      port: 6379
+  session:
+    data:
+      redis:
+        namespace: shopagent:runtime:session
+
+shopagent:
+  ai:
+    base-url: http://ai:8000

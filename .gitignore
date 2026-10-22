@@ -1,0 +1,61 @@
+# 本地配置与凭据
+.env
+.env.*
+!.env.example
+application-local.yml
+application-local.yaml
+backend/config/admin-local.properties
+backend/config/admin-credentials.txt
+*.pem
+*.key
+*.jks
+*.keystore
+
+# IDE / 临时输出
+.idea/
+.vscode/
+*.iml
+*.log
+logs/
+tmp/
+.DS_Store
+Thumbs.db
+
+# Java
+target/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Web
+node_modules/
+dist/
+
+# Android
+.gradle/
+build/
+local.properties
+*.apk
+*.aab
+
+# 运行期数据（需要加入的演示小样本应另放 samples/）
+uploads/
+vector_store/
+faiss_index/
+model_cache/
+.reference/
+
+# 运行凭据与数据库备份
+secrets/
+backups/
+*.p12
+*.pfx
+
+# 本地设计检查输出
+.taste-skill/

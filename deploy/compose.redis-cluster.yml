@@ -1,0 +1,72 @@
+name: shopagent-cluster-lab
+
+x-redis-node: &redis-node
+  image: redis:7.4.11-alpine
+  pull_policy: never
+  restart: "no"
+  mem_limit: 128m
+  command:
+    - redis-server
+    - --bind
+    - 0.0.0.0
+    - --protected-mode
+    - "no"
+    - --cluster-enabled
+    - "yes"
+    - --cluster-config-file
+    - nodes.conf
+    - --cluster-node-timeout
+    - "5000"
+    - --appendonly
+    - "yes"
+    - --dir
+    - /data
+    - --maxmemory
+    - 32mb
+    - --maxmemory-policy
+    - noeviction
+  healthcheck:
+    test: ["CMD", "redis-cli", "ping"]
+    interval: 5s
+    timeout: 3s
+    retries: 12
+  networks:
+    - cluster-lab
+
+services:
+  redis-1:
+    <<: *redis-node
+    volumes:
+      - redis-1-data:/data
+  redis-2:
+    <<: *redis-node
+    volumes:
+      - redis-2-data:/data
+  redis-3:
+    <<: *redis-node
+    volumes:
+      - redis-3-data:/data
+  redis-4:
+    <<: *redis-node
+    volumes:
+      - redis-4-data:/data
+  redis-5:
+    <<: *redis-node
+    volumes:
+      - redis-5-data:/data
+  redis-6:
+    <<: *redis-node
+    volumes:
+      - redis-6-data:/data
+
+volumes:
+  redis-1-data:
+  redis-2-data:
+  redis-3-data:
+  redis-4-data:
+  redis-5-data:
+  redis-6-data:
+
+networks:
+  cluster-lab:
+    internal: true

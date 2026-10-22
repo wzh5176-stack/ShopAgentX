@@ -1,0 +1,114 @@
+name: shopagent-runtime
+
+x-backend: &backend
+  image: shopagent-backend:dev
+  pull_policy: never
+  restart: unless-stopped
+  mem_limit: 640m
+  environment:
+    SPRING_PROFILES_ACTIVE: container
+    JAVA_TOOL_OPTIONS: -Xms64m -Xmx256m -XX:MaxMetaspaceSize=192m
+  secrets:
+    - source: db_password
+      target: spring.datasource.password
+  volumes:
+    - ./backend/application-container.yml:/app/config/application-container.yml:ro
+    - ../secrets/admin-local.properties:/app/config/admin-local.properties:ro
+  depends_on:
+    mysql:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+    ai:
+      condition: service_healthy
+  healthcheck:
+    test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8888/api/health"]
+    interval: 10s
+    timeout: 5s
+    retries: 12
+    start_period: 60s
+
+services:
+  mysql:
+    mem_limit: 768m
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$$(cat /run/secrets/mysql_root_password)\" mysql --host=127.0.0.1 --user=root --execute='SELECT 1' >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 40s
+
+  redis:
+    image: redis:7.4.11-alpine
+    restart: unless-stopped
+    mem_limit: 192m
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - runtime-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+  ai:
+    image: shopagent-ai:dev
+    pull_policy: never
+    restart: unless-stopped
+    mem_limit: 1400m
+    environment:
+      DEEPSEEK_API_KEY_FILE: /run/secrets/deepseek_api_key
+      SHOPAGENT_EXTRA_CA_FILE: /opt/shopagent/certs/windows-roots.pem
+      HF_HUB_OFFLINE: "1"
+      TOKENIZERS_PARALLELISM: "false"
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    entrypoint: ["/bin/sh", "/opt/shopagent/start-ai.sh"]
+    command: ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+    volumes:
+      - ./scripts/start-ai.sh:/opt/shopagent/start-ai.sh:ro
+      - ../models/bge-small-zh-v1.5:/app/model_cache/bge-small-zh-v1.5:ro
+      - ../certificates/windows-roots.pem:/opt/shopagent/certs/windows-roots.pem:ro
+    secrets:
+      - deepseek_api_key
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 45s
+
+  backend-a:
+    <<: *backend
+
+  backend-b:
+    <<: *backend
+
+  nginx:
+    image: nginx:1.30.2-alpine
+    restart: unless-stopped
+    mem_limit: 64m
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./nginx/nginx.runtime.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      backend-a:
+        condition: service_healthy
+      backend-b:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+
+volumes:
+  runtime-redis-data:
+
+secrets:
+  db_password:
+    file: ../secrets/spring.datasource.password
+  deepseek_api_key:
+    file: ../secrets/deepseek-api-key.txt
