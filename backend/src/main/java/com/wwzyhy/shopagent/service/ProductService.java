@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wwzyhy.shopagent.entity.Product;
 import com.wwzyhy.shopagent.mapper.ProductMapper;
+import com.wwzyhy.shopagent.entity.ProductInventory;
+import com.wwzyhy.shopagent.mapper.ProductInventoryMapper;
 import org.springframework.stereotype.Service;
 import com.wwzyhy.shopagent.dto.ProductCreateRequest;
 import java.net.URI;
@@ -18,9 +20,13 @@ import java.util.List;
 public class ProductService {
 
     private final ProductMapper productMapper;
+    private final ProductInventoryMapper inventoryMapper;
 
-    public ProductService(ProductMapper productMapper) {
+    public ProductService(
+            ProductMapper productMapper,
+            ProductInventoryMapper inventoryMapper) {
         this.productMapper = productMapper;
+        this.inventoryMapper = inventoryMapper;
     }
 
     public Product findOnSaleById(Long id) {
@@ -68,6 +74,7 @@ public class ProductService {
         return productMapper.selectPage(pageRequest, query);
     }
 
+    @Transactional
     public Product create(ProductCreateRequest request) {
         Product product = new Product();
 
@@ -80,8 +87,16 @@ public class ProductService {
         product.setDeleted(0);
 
         int rows = productMapper.insert(product);
-        if (rows != 1) {
+        if (rows != 1 || product.getId() == null) {
             throw new IllegalStateException("新增商品失败");
+        }
+
+        ProductInventory inventory = new ProductInventory();
+        inventory.setProductId(product.getId());
+        inventory.setAvailableQuantity(0);
+        inventory.setReservedQuantity(0);
+        if (inventoryMapper.insert(inventory) != 1) {
+            throw new IllegalStateException("初始化商品库存失败");
         }
 
         return product;

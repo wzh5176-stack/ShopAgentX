@@ -1,0 +1,24 @@
+# Add after compose.mysql.yml and compose.runtime.yml; original images/config remain intact.
+x-trade-backend: &trade-backend
+  image: shopagent-backend:trade-20261024
+  environment:
+    TZ: Asia/Shanghai
+    JAVA_TOOL_OPTIONS: -Xms64m -Xmx256m -XX:MaxMetaspaceSize=192m -Duser.timezone=Asia/Shanghai
+    SHOPAGENT_ALIPAY_SANDBOX_ENABLED: "true"
+    SHOPAGENT_ALIPAY_SANDBOX_CONFIG_FILE: /run/secrets/alipay/application.properties
+    SHOPAGENT_ALIPAY_SANDBOX_PRIVATE_KEY_FILE: /run/secrets/alipay/app-private-key.pem
+    SHOPAGENT_ALIPAY_SANDBOX_ALIPAY_PUBLIC_KEY_FILE: /run/secrets/alipay/alipay-public-key.pem
+    SHOPAGENT_ALIPAY_SANDBOX_GATEWAY_URL: https://openapi-sandbox.dl.alipaydev.com/gateway.do
+    SHOPAGENT_ALIPAY_SANDBOX_NOTIFY_URL: ${SHOPAGENT_ALIPAY_SANDBOX_NOTIFY_URL:-}
+    SHOPAGENT_ALIPAY_SANDBOX_RETURN_BASE_URL: http://127.0.0.1:8080
+    SHOPAGENT_ALIPAY_SANDBOX_RECONCILE_ENABLED: "true"
+    SHOPAGENT_PAYMENTS_MOCK_ENABLED: "false"
+  volumes:
+    - ./backend/application-trade.yml:/app/config/application-container.yml:ro
+    - ../secrets/alipay-sandbox-trade-20261024:/run/secrets/alipay:ro
+
+services:
+  backend-a:
+    <<: *trade-backend
+  backend-b:
+    <<: *trade-backend

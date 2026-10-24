@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-24",
+  "accepted": true,
+  "scope": "Official close/cancel/expiry coordination with simulated SDK transport and query/MOCK/order lifecycle regressions",
+  "checks": 432,
+  "groups": {
+    "alipay-close-formal-2026-10-24.json": 83,
+    "alipay-close-query-regression-2026-10-24.json": 104,
+    "alipay-close-mock-regression-2026-10-24.json": 137,
+    "alipay-close-lifecycle-regression-2026-10-24.json": 108
+  },
+  "jar_sha256": "c5f6e2f57881ea87bff2beeef62fa22b5dbce50c5b9625e6ea8c862c3c81310d",
+  "same_source_and_jar": true,
+  "all_owned_processes_stopped": true,
+  "official_api_calls": 0,
+  "user_alipay_material_read": false,
+  "ddl_or_grants_executed": false,
+  "notify_and_real_sandbox_verified": false
+}

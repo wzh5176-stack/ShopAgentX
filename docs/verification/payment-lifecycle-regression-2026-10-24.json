@@ -1,0 +1,775 @@
+{
+  "date": "2026-10-24",
+  "scope": "formal list/cancel/expiry/product initialization and actual scheduled workers; real MySQL/HTTP/transaction faults",
+  "checks": [
+    {
+      "name": "original data has no overdue pending orders before scheduler test",
+      "passed": true
+    },
+    {
+      "name": "controlled context disables automatic expiry",
+      "passed": true
+    },
+    {
+      "name": "register fixture a",
+      "passed": true
+    },
+    {
+      "name": "login fixture a",
+      "passed": true
+    },
+    {
+      "name": "register fixture b",
+      "passed": true
+    },
+    {
+      "name": "login fixture b",
+      "passed": true
+    },
+    {
+      "name": "new user empty page and metadata",
+      "passed": true
+    },
+    {
+      "name": "own order pagination newest id first",
+      "passed": true
+    },
+    {
+      "name": "summary projection omits private and detail fields",
+      "passed": true
+    },
+    {
+      "name": "other user page isolated",
+      "passed": true
+    },
+    {
+      "name": "beyond last page empty",
+      "passed": true
+    },
+    {
+      "name": "status filter pending",
+      "passed": true
+    },
+    {
+      "name": "invalid page/filter400 ?page=0",
+      "passed": true
+    },
+    {
+      "name": "invalid page/filter400 ?page=-1",
+      "passed": true
+    },
+    {
+      "name": "invalid page/filter400 ?size=0",
+      "passed": true
+    },
+    {
+      "name": "invalid page/filter400 ?size=51",
+      "passed": true
+    },
+    {
+      "name": "invalid page/filter400 ?page=abc",
+      "passed": true
+    },
+    {
+      "name": "invalid page/filter400 ?page=2147483648",
+      "passed": true
+    },
+    {
+      "name": "invalid page/filter400 ?status=OTHER",
+      "passed": true
+    },
+    {
+      "name": "invalid page/filter400 ?status=paid",
+      "passed": true
+    },
+    {
+      "name": "anonymous order list denied",
+      "passed": true
+    },
+    {
+      "name": "anonymous order cancel denied",
+      "passed": true
+    },
+    {
+      "name": "admin_only order list denied",
+      "passed": true
+    },
+    {
+      "name": "admin_only order cancel denied",
+      "passed": true
+    },
+    {
+      "name": "cancel missing CSRF403",
+      "passed": true
+    },
+    {
+      "name": "cancel foreign CSRF403",
+      "passed": true
+    },
+    {
+      "name": "other owner cancel404 without mutation",
+      "passed": true
+    },
+    {
+      "name": "missing order cancel404",
+      "passed": true
+    },
+    {
+      "name": "invalid cancel id400 0",
+      "passed": true
+    },
+    {
+      "name": "invalid cancel id400 -1",
+      "passed": true
+    },
+    {
+      "name": "invalid cancel id400 abc",
+      "passed": true
+    },
+    {
+      "name": "expiry internal method has no public HTTP route",
+      "passed": true
+    },
+    {
+      "name": "normal cancel200 releases exact quantity and sets close time",
+      "passed": true
+    },
+    {
+      "name": "repeat cancel replays without double release",
+      "passed": true
+    },
+    {
+      "name": "cancelled create request replays closed order without reserving",
+      "passed": true
+    },
+    {
+      "name": "cancelled and pending filters reflect current state",
+      "passed": true
+    },
+    {
+      "name": "not-due expire is read-only no-op",
+      "passed": true
+    },
+    {
+      "name": "cancel after deadline becomes EXPIRED and releases once",
+      "passed": true
+    },
+    {
+      "name": "expired replay and worker no-op do not release twice",
+      "passed": true
+    },
+    {
+      "name": "paid order cannot cancel409 and no stock mutation",
+      "passed": true
+    },
+    {
+      "name": "expiry skips paid orders",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault first_release_reached",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault first_release_throws",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault first_release_whole_order_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault second_release_reached",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault second_release_throws",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault second_release_whole_order_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault status_update_reached",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault status_update_throws",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault status_update_whole_order_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault readback_reached",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault readback_throws",
+      "passed": true
+    },
+    {
+      "name": "cancel real TX fault readback_whole_order_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "expiry real TX fault first_release_reached",
+      "passed": true
+    },
+    {
+      "name": "expiry real TX fault first_release_throws",
+      "passed": true
+    },
+    {
+      "name": "expiry real TX fault first_release_whole_order_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "expiry real TX fault second_release_reached",
+      "passed": true
+    },
+    {
+      "name": "expiry real TX fault second_release_throws",
+      "passed": true
+    },
+    {
+      "name": "expiry real TX fault second_release_whole_order_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "expiry real TX fault status_update_reached",
+      "passed": true
+    },
+    {
+      "name": "expiry real TX fault status_update_throws",
+      "passed": true
+    },
+    {
+      "name": "expiry real TX fault status_update_whole_order_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "expiry succeeds after faults removed",
+      "passed": true
+    },
+    {
+      "name": "inconsistent second reservation fails500 with complete rollback",
+      "passed": true
+    },
+    {
+      "name": "repaired fixture can close normally",
+      "passed": true
+    },
+    {
+      "name": "batch isolates bad expired order and still closes good one",
+      "passed": true
+    },
+    {
+      "name": "repaired overdue order expires on next batch",
+      "passed": true
+    },
+    {
+      "name": "two overlapping cancels release once and return same terminal detail",
+      "passed": true
+    },
+    {
+      "name": "cancel racing expiry keeps EXPIRED and releases once",
+      "passed": true
+    },
+    {
+      "name": "overlapping expiry transactions one transition only",
+      "passed": true
+    },
+    {
+      "name": "cancel during old outer snapshot succeeds",
+      "passed": true
+    },
+    {
+      "name": "old RR caller replays current closed state without extra release",
+      "passed": true
+    },
+    {
+      "name": "real release lock timeout returns409",
+      "passed": true
+    },
+    {
+      "name": "release timeout leaves status and full inventory unchanged",
+      "passed": true
+    },
+    {
+      "name": "retry after release succeeds",
+      "passed": true
+    },
+    {
+      "name": "unlisted logically deleted product still releases reserved stock",
+      "passed": true
+    },
+    {
+      "name": "admin product creation201 retained",
+      "passed": true
+    },
+    {
+      "name": "new product has zero available and reserved stock",
+      "passed": true
+    },
+    {
+      "name": "new zero-stock product cannot order",
+      "passed": true
+    },
+    {
+      "name": "product/inventory initialization TX product_after_reached",
+      "passed": true
+    },
+    {
+      "name": "product/inventory initialization TX product_after_throws",
+      "passed": true
+    },
+    {
+      "name": "product/inventory initialization TX product_after_product_and_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "product/inventory initialization TX before_inventory_reached",
+      "passed": true
+    },
+    {
+      "name": "product/inventory initialization TX before_inventory_throws",
+      "passed": true
+    },
+    {
+      "name": "product/inventory initialization TX before_inventory_product_and_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "product/inventory initialization TX inventory_after_reached",
+      "passed": true
+    },
+    {
+      "name": "product/inventory initialization TX inventory_after_throws",
+      "passed": true
+    },
+    {
+      "name": "product/inventory initialization TX inventory_after_product_and_inventory_rolled_back",
+      "passed": true
+    },
+    {
+      "name": "real scheduled workers automatically expire overdue order",
+      "passed": true
+    },
+    {
+      "name": "subsequent scheduled scans do not release again",
+      "passed": true
+    },
+    {
+      "name": "status filter EXPIRED returns only owned expired rows",
+      "passed": true
+    },
+    {
+      "name": "existing route regression health",
+      "passed": true
+    },
+    {
+      "name": "existing route regression products",
+      "passed": true
+    },
+    {
+      "name": "existing route regression identity",
+      "passed": true
+    },
+    {
+      "name": "existing route regression cart",
+      "passed": true
+    },
+    {
+      "name": "existing route regression conversations",
+      "passed": true
+    },
+    {
+      "name": "existing route regression addresses",
+      "passed": true
+    },
+    {
+      "name": "app_users_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "products_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "cart_items_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "cart_actions_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "chat_conversations_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "chat_messages_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "user_addresses_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "product_inventory_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "shop_orders_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "order_items_original_rows_unchanged",
+      "passed": true
+    },
+    {
+      "name": "all test reservations and pending orders cleared",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "source_hashes": {
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\ShopAgentApplication.java": "a53e255471fd08a054cc0edf65815718b675f717f9c4217f883a6bffb4bb403c",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\client\\AiSseReader.java": "fae85c2e39b1e96b96a011b876476d526a512a10c4e9ecde5dc292070f42b318",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\config\\AiClientConfig.java": "050772b50d4af2898a0754c2f172e32a20b546281711ceee020d3fbc0bab7f13",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\config\\AiStreamConfig.java": "caaa989e32f0c267c755be24b1b06772ed6e467a23cdc4c1a264bd19ed432efe",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\config\\ClockConfig.java": "100c09184db36e036304c28b8b665a5d5609d0675d7059b30d69fe1102f56fa4",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\config\\MybatisPlusConfig.java": "0585aecd7c94fcfd063e589e120b14f04aab494380f21e50779d937bcfa2a91d",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\config\\OrderSchedulingConfig.java": "36cd43f3c89eba567dbd5779a6d470f19479b5e0cd1629b2cdba3da1261f47d1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\config\\PaymentSchedulingConfig.java": "dac10112eee9517cfe3f97f93439a319416039805962809036eb26be468e1825",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\config\\SecurityConfig.java": "5b0c73186b5b7f71c41da3c33a6cfa2913241fb785463a7e52e614e294b9b80e",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\config\\WebJsonConfig.java": "07805bd95a45a8cef14010e79b6636016e1a85cb7823826abe5750a774fd11cc",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\AddressController.java": "2003937192bf0bd2eed1b0d3e9f3606af70f9de0407e65fe953ee42d78587629",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\AdminAiStreamController.java": "df235b33032e6255225bd9068fd7d9f213cafa310e9bbc9c59cfd2a457817224",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\AdminCsrfController.java": "391e136fb8c8dd372d94320f22b06d23aefeba3b4f4f0d7466f924c5e755c1f0",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\AdminHealthController.java": "cf93b2d2a935689d88fd7605f6efd6ba6457bed5e72c6129607a1748750b1919",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\AdminProductController.java": "88bd761ca77c65a5d60ec2bc4a513263b2ac2d4d5058b9765b7f55297556a8bb",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\AiBridgeController.java": "23bff4ace303de043bcfde191d6c77d1ab15ff49484d9cca897850c7d32b7e28",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\AssistantController.java": "10aa649b590345361e6a7a29c9cdeab08e23f3c7099b536ff73b2dfc60392c7e",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\AuthController.java": "178c7b2a2fbb4a82a710120c1e3be76c21a937f87dd2a7c948e31234d3cd1da9",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\CartActionController.java": "c868d5ec0deab6e9511c80d20edca1cbfa51fc6bc2f4e61fb3374c6089f529b1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\CartController.java": "d8ffcabaadf9d79fe50f729cac7d9aafa927e4c73db6b9458ad0630070d9375e",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\CartToolController.java": "84a5b7f32fb257da1f21cd1b5cd9deebb4c4d0c7c6b60b3764454590241cb816",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\ChatConversationController.java": "cfabc48a295d503952f01b499e6250b602bfd09165bb017ff7853618b34a8560",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\ChatMessageStreamController.java": "4bab74cc18b05f5c7c0544df3b01308789e424db0c8b6c85fe3b36c0c08bb04f",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\CheckoutController.java": "a72387ad852afec72beea7eeec368781af90e5cb6407ee09f893edd24a16f2ea",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\ConversationTurnController.java": "74c73ead524afef14e3c049797b96ce9f7600a4a0a4c4f37482c0da925698e25",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\CsrfController.java": "aa811d485afde85d922ea125e564e21ca48ef2dd430bfb2b0c44622b7618be8c",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\HealthController.java": "8c2547f11eb97bbfddca435219785f1c325a2d9f94c8b9156a68b39cd0887ead",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\KnowledgeController.java": "099b2e5611e2b463e6e3d5301560262265e43976c7bd90c57b897349e6407239",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\MockPaymentController.java": "96fd1a5c3b22ba7a9f6b1d65bcb902ae8e70103ebfc374ee7aa06327318561e0",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\OrderController.java": "55d1e7999efc4cba613e201ac69174d9a907d022c99dfe89c56fc299816212b1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\PaymentController.java": "ed748d627b7b04756c4956f1733a3b77f9bdf595b4e310824cdbac2d020368c5",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\controller\\ProductController.java": "b549ec7e3033617078f2f42750bf2874eac1f4d96e8a51ec15bf5ff2734a721e",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AddressResponse.java": "d4355a69bce0b221546791c1b72867a8fbb188365c5b473fb2058fe09d609ac9",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AddressWriteRequest.java": "f53a248b8ee9dfe4cd417d194e5f333e54d16c75faf6828e9a33fde8612f219f",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AdminProductDetailResponse.java": "e946b3de600784fb3d526cc8604ba94d99980e4d301d3e7c73267e77346d497c",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AdminProductPageResponse.java": "d532610ad1b882ce9e5e3df67cb17988b955778bd4198a7315ad1a11762205fe",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AdminProductSummaryResponse.java": "7565055796c7764582c493482ce3b7555b0b763dad1acbccf56e90da7f8480f7",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiAskRequest.java": "d68ae21af297b2fc596076748f12eddc9cb8076ae99b051b87c205edc42d0ed1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiAskResponse.java": "2e8b1e47f02af15bdcb3b94d35bb7c8992ff96e00307ba1ead243d3036852bd1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiCandidateProduct.java": "9f3d0e055ef6e2cff1060d64df6a14c4222120b126c592c7076d4097fb534ad8",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiCartToolIntentData.java": "9f4791f1f10305d0642c31855aa3f4cd32f845ee4915ed018a2e1b4a6da674da",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiCartToolIntentRequest.java": "21e3b95b186e025230b98890b3acef883382244c0c7007e73ae087e3b2a01de2",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiCartToolIntentResponse.java": "f81b2cd4676ca1fc374266abd2ec7dcd7d81f1fa0e1c4023a3cda26dbf4c2164",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiCartToolProduct.java": "f55e29c702f6d0a0950d371105344009ac01d0315b0ce775582a282419b6c168",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiChatData.java": "7dade3bddf93bfd2344cd8e71069915c86783a421db47cd8dbf78337876ce8b0",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiChatResponse.java": "84eb2ea5d87f4fad9a9038eb0e9386f75545c3994bc1a2178b07a1e82629f757",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiConversationIntentData.java": "f848ebc2374e4a23b62873655655db09c6b4e6d1165cffe9d3af10ac86e60903",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiConversationIntentRequest.java": "1ec49c009d1990ad22b8b5542921435ff279849a592160df22960f05dff37de8",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiConversationIntentResponse.java": "3b1858e9b98dd7a9dc1d22f59974685435a7c3c0814f2f8c82989ca79fb8cc22",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiConversationMessage.java": "597e835c007099994b62a7703cb5607093035c806bd171030046078c0f154d93",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiEchoData.java": "506abf37d25ba48bcb46fb78a2eb6453c646dea3b3a41ebd0a3be2892f167569",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiEchoResponse.java": "c31136cac9c488a8fb8dbc39898559bd4ceaae5a7892553cfb08643a48053ee8",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiHealthData.java": "8c5f0723fbb7ad31b2b5971fddfa49b5220e8077819946929cc88a12875b5556",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiHealthResponse.java": "1d09af46238d74def5dd383c05963c726757f2db4b03961bddf90f4a7fcef7a2",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiIntentData.java": "8b412d3936ab35b4fba6074bed9d91802db09db315b2ecdb3ff59d3c68b7e786",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiIntentResponse.java": "e55d21e9d9344d6586fda5afc6292d97a50b5037accbc13b8f58dd1a22f9ff3d",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiKnowledgeData.java": "91c44f86ac522c9030a4378f8edf3f5052515d2b8b8ef90d4874c6939cb21b1f",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiKnowledgeResponse.java": "8e6ec2ceb0a95981f1822f87037a604aa4e5ddc70d74867ba41bbaf63992a163",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiKnowledgeSource.java": "c067e68eac31ecaf47e4802c5530303f03198ae116e9b3bf9c0c87bfbd6eca45",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiProductSelectionData.java": "447470eadfd9312fd0add53aab42c2d67bce001c4c13ca4c2fd958d73ed4e7a0",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiProductSelectionResponse.java": "4605b3b338016e6181fa49bf1fa272185e52f3405d5bf667dfa4dd2d1376de63",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiRecommendationData.java": "b74f5977ea682ddb4194e0a99f5a441e50d84542bdf20fe21f075214fa8a0554",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiStreamDelta.java": "3aeedeb45919985959d862daab7649220bcb8d60c3294a5c1c9218f3b1799952",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiStreamError.java": "8bb76cc72660804cfa0f1b5400e8d48f21b41092b4c102c5dbdb7b21c0f3e839",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AiStreamEvent.java": "e2e6645acba102b5fdb3e0bb09be52018040f6363749a10b064af4060dd4be34",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AssistantResponse.java": "ed31b8238d1d7fd9632806a4832683bf15159a785f2e1df7e9e8ef4263ab1504",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\AssistantResult.java": "f6e1b7067900c3d1204efaa8e3e91c25c75b0c58ff75d2eff378d65de22925a1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CandidateSearchResult.java": "a31ea758b11d615a10d894027762a9b9828f127775aef2a6686cafce45ecae71",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CartActionCreateRequest.java": "3e408a87dd3875c4c42e516ea7897f5e62b38a318ae4c8453b65542e4ade4abd",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CartActionResponse.java": "bd51c56a3ee1aeba0b04dcdcfcdbcb8c0078b823f06376a0733d228f02738d52",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CartActionStatus.java": "46413c8b4665a2c53fe316cb570aa8c06736d022692434b40b50aaf91f225c09",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CartItemResponse.java": "c7d42134001f0c229ec9dc31764b4dec62b1d043ba78f2a51e38dac5f5540814",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CartItemSetRequest.java": "fe6c710b6249b4df974e98a3ce2bb5994c9b3a78224d21d978b1fc17baa99b31",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CartItemSetResponse.java": "81109b73f3e2a69a70ce4fcdbf2a39dbabbe2773330c43ab48094c91e1d4a6a5",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CartResponse.java": "8d5e6321e8094d0a46b25d47e96de6832d2f168a9798ffdfc042711c799694dc",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CartToolPrepareRequest.java": "1712747aec3cdf61f88518e163a4d8273765fd76dc4af02308b6616ac17b989a",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CartToolPrepareResponse.java": "00de847433e21a9e59da235e904d3c3ec33c27a3cb915aca3c7dd84140fdc457",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ChatRequest.java": "ee8bedeca5c86e537285db9487b8ac9175156c27796b0f0b3f2fc3ba6c036de3",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CheckoutItemRequest.java": "3ed6ad331957d84e684dfa5f04f25fc13e3a2fb2968ac9d2b7e4e45dbead85f1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CheckoutItemResponse.java": "259b6440d58bf3182ab5e0cace2eeeed471f04812879ae72ff6d90766a3c3e9d",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CheckoutPreviewRequest.java": "21c9de6b4ac2b6793375eaaa2e282aaed9f7203a5dc5ea3a57a09496393d8d3a",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\CheckoutPreviewResponse.java": "5460618c71167a35f5db5880df80a54df98debb8f9908736960a85f18524c5f4",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ConversationContext.java": "7b296fd7b13b3ac34bbb2a22064c2e94a239d053a3a36f4ccadd62f1f850aeb5",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ConversationCreateRequest.java": "a0fff7e22b7dc98d915e5807b9a9580705b8fda8fa08f81dff59b5f04d60e63a",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ConversationPageResponse.java": "b72fe2c027dd5425b553e01f89654270b2aa6a2a22bac26a3cb6ee9afca2f5e6",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ConversationResponse.java": "bce4406a65deb681091903544dc7a709e441e8da6bfe32e001ffa7158dadc4a6",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ConversationTurnRequest.java": "91c194ff7745ec704a5b7bd6fc3ddb762ba7b2d991a038c1b1e8d3d34b8b9a68",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ConversationTurnResponse.java": "5cae11b262895204f6dfd112fddf07fe785b903906023ee2c9b64bd308021227",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\EchoRequest.java": "6a30298fdb7f6e523550f459211ec0ed19e80e4ec4b8d538ed03e964d5856862",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\IntentRequest.java": "88b8f109eb457725123485a61a0fdff3a76edfd5dae0bf97af3785952fa434d2",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\MessagePageResponse.java": "f374e96b440b3d8685e45a61f154cd3a43ea43bb97c6aa724179390812e6762f",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\MessageResponse.java": "4b777666e7e92e4078e592d67e05dc4555089f5bdd4f8c6f1a944597348ef81b",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\MessageSendRequest.java": "a0c1709f71a2105db6e3492602a28dfacd2aeb224243992cef5968a9e83c4b0d",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\MessageSendResponse.java": "3678e3ed29043dd6934048a73b5c0fbb2219059b7f8120156549bb9ad7f6ed4b",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\MockPaymentOutcome.java": "c66103e684ccd27799fd7c7ad1c6d6d75d046c1a17301279d60f285ba8ad6cdd",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\MockPaymentRequest.java": "e8db4461579ded433f5b1ce0d6246a507900960e8f0702cd5d185d3348d6b36e",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\OrderAddressResponse.java": "2f72ab831253b5c059286501caa3a4047213ca31c46e09ce81152590e419b1c2",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\OrderCreateRequest.java": "a0ce63b6887c7afab9230e9e7b1217822c6b1f3f9e41465962ed9dc0cdfa32aa",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\OrderCreateResult.java": "ec0d79324b97015d26bc7f13617b4df66879975a3fd5d0244056aa43212ad734",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\OrderDetailResponse.java": "57442be15067238a948e87e29a2d6533ce16c1b65b8b060a875fdd3a9a0e8bc2",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\OrderItemResponse.java": "d6875f81b9eefb59e606678868e4d8824362d257bca480ed533e3d1a55a4ac63",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\OrderPageResponse.java": "37bd3aa982fde35c1f438b0c8ee80a9c154971a57932b412d98696769cde7f9b",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\OrderStatus.java": "946c81a221439bfcdd7c11a9216b0119a619590e102048ca3c1441b27df6d5fe",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\OrderSummaryResponse.java": "5363c05c5d431776d26b528089dba868a2cb6b97d1c1373b36bc8c82ddaf00f2",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\PaymentCreateRequest.java": "4de9624715ba6192942e5a66be7fa04968642725e743d38f8b628d1a4a56c50a",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\PaymentCreateResult.java": "c7547ebe07f2a006952bcebe7a02bb73d2a3858a38d13756763238b03e5f38e0",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\PaymentGatewayResult.java": "905f67e8c4fc7c1d24058cc5456bd3655311668e3d075336d9e2bfd2b56363d2",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\PaymentResponse.java": "ed50d45cb47a554dbfb6e10a63bdb2496ac76505284d6cd3955cec5fdd9f8d9f",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\PaymentStatus.java": "100ac4b63b994b4d2a62e09804c9f6f2a5ce4d74b24a0e784465827262bf5f17",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\PreparedOrderRequest.java": "d71653e7f486bc65e448ccefe84787c328d60911afa1813a50ab911d59886aa6",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ProductCreateRequest.java": "0dc1e6fe0dd4d1e4f42ed04640811adf3e953e76f06fd3acc8d521ef12c2bfc4",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ProductDetailResponse.java": "105d3f03243a73e4d19afefa7d616da8501e0c4c868b181911c20d65a4570a23",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ProductPageResponse.java": "378edc4970dc4a8ed4a850ccd623c62dc141f6c659861216e7abc40511c269ba",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ProductStatusRequest.java": "5da931938a55441e72955133b1f2cca4cd2325f5c73bc3b563c19a563111209f",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ProductSummaryResponse.java": "4dc0f169de05ba0842597fb6f786e334f38c253fdac75d37af3b5131e3f5f937",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\ProductUpdateRequest.java": "93e4f09a8c06a4676ad84cc7200ca26da05826d89ec178c6dc54ca812cf8bf2d",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\RegisterRequest.java": "a8790e8db7f85506ecbd6021ae0d288760660e523ace5b5a6bf1ff77ae4f2ebb",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\dto\\UserResponse.java": "899c6c5b40774f60c0e6f29bbe24a0cf724b5bc51a6957451e6a8411446ea606",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\AppUser.java": "ef84489ce309ebcd9e2cf4ff06cb5aac74b295b3a16b4e4832d7206a7027c187",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\CartAction.java": "673cc0737ee1720557dd9b52ece133670b06ea67d03a116e61bfc12f467326f1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\CartItem.java": "47954d49ecd12bc57d5d55867d319737c9f1ed4c4009de289b79655a5b4692b1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\ChatConversation.java": "5f9f152d8655b4dc1b81a0e2476fadd5639ca3ece25c08336e5c0348b97002aa",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\ChatMessage.java": "255bbd42871c4e44c2977eadbbe0ac5ecc81af314f3863390010bfd9b40047dd",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\MockPaymentReceipt.java": "76b8d87c54658e8c196adcc0220e07a2da6159c10344f1d3ddbda557ba1227aa",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\OrderItem.java": "aab6df7b0037c877642aa84096a4096a53b47c530e2412ecfd38a9d199d8f194",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\PaymentAttempt.java": "5419ffa2196dd2660d756044f44ca538dd681f156640005e94dd0a8070451085",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\Product.java": "47495712c4a83379de96da7ffdbab55b9ca1fd66af0c9865266fdcb3975dd275",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\ProductInventory.java": "43dd8f572320924eadb202be7f62c9e117ea6453770304bca822dab7913a9bc6",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\ShopOrder.java": "20ea59725a1d504cacc7f09d4737e48eb19e4d0306655265a42127e27af369c2",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\entity\\UserAddress.java": "efe17c176f2358bb967a02bc9b4d942e21a531e34940d9ce18225cdc8f14843b",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\AddressExceptionHandler.java": "34e5050205cd25b385de6f0f7ce1a818f49d6a56c94ddbaa433112ccea2d17f1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\AddressNotFoundException.java": "a4e507da2d693ca21cc8be77d621cedfbea7066c2189b8faca7e7f12e67b8769",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\CartActionNotFoundException.java": "12b9578acde8f6ca4472cfc964bd7d545b3b73148578b1083e7238080cb980eb",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\CartProductUnavailableException.java": "2fc885f93138d78dc40fce7310ad4c31403a41248b06cccb98018d0bb7785b0c",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\CheckoutExceptionHandler.java": "b67ea30b3ef484d3a88d8c03ac8373f34ebb01ff1f41dd22c762265d86cd8e15",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\CheckoutUnavailableException.java": "155c87c35daff9fd4c2de45ea6822849a57167d042ebdcc0d9dc35b18b7fb040",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\ConversationChangedException.java": "59cbeacb68acf009508607ea2f918bd0826159cda6079f097130321d29ab04ac",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\ConversationNotFoundException.java": "b0ea71380302fc47787f1e65ca14548ddede7ba9eff82ff5812c2deb928b1b0c",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\GlobalExceptionHandler.java": "a466d6199af45744b261c41132e1dd01563e288146a8b6599cb602119b6fefd3",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\OrderConflictException.java": "5b1ec0b3625aa3e16354a3bbe0ad77bac44d675ca844800cbde7bdc689c7db66",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\OrderExceptionHandler.java": "f6a37a2a0b942f4754114807f46a6277dddc5ccc7ac75c91138367a27e366972",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\OrderNotFoundException.java": "5acfcd85ff8c42f7df23818e474025a7d64bb924160b09ba1d3da1b7f95c5c0a",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\PaymentConflictException.java": "65cbb2b12f26d8f6283ecd22d2359a141f308f5912bcc93e5faf1c0c016f34d7",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\PaymentExceptionHandler.java": "cedb2b37a3af7a6f4ab32e9f7ee6bb7ee217cef8aa4f248e9d4d1d66c68c2f05",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\PaymentNotFoundException.java": "12ec2d346b678f9b1ed07a29bb9d31db66927ca99bf1c7599eaeab99ae718586",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\PaymentUnavailableException.java": "32e1025b9e470fd5938659590557eef3dc2af5411412e52e17c1d8f8bebe120b",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\RecommendationSourceNotFoundException.java": "b6870a7eece9487f5ff7fd39ab361f8c477d213d68c0cd2aaeef8b3b5071dec3",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\exception\\UsernameAlreadyExistsException.java": "dff26bbf3db7d7d2ef832d0c6a271658ca8f676690da31e9162d03a86b43c020",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\AppUserMapper.java": "711d1efc778642c001107284f6562f6e809cf99dc9f75a472497192933e3c62c",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\CartActionMapper.java": "81c17f16752558bdc461ded2e6f8f26fbc18d90e00315da8387dfd9b755b5298",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\CartItemMapper.java": "ec8b1882be6b77636ee76dccda88e70123b3519adbb56f320d44f3bb27e1e46a",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\ChatConversationMapper.java": "7a23875d076165b2d37dc6c942d73ed9d2f3c7d8ef5935fc4e65837d94942cae",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\ChatMessageMapper.java": "1a17b99c9a1ecdd9ff8cc98168ae347f249ac6e0cf289fd9d37f87b9a2add3c8",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\MockPaymentReceiptMapper.java": "04bb2b3ff4c43df3925b0abcc2fffaeffad0a7de506f7a5744bc9d0eef5af847",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\OrderItemMapper.java": "6e9f667c72cebc849ae01446bcde94e8c07de33a4252cdcd489f76258baa3e9d",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\PaymentAttemptMapper.java": "6c508f0b86d4861ff878a0843a0257304c6dc90d5fa3a485105990021cac302d",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\ProductInventoryMapper.java": "d7033ccfa4569ea776e3f56ee588f84da650ab82219e4fe94ab04ffd79b0f459",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\ProductMapper.java": "eb0da5954a11c603eeea56c84fb1fe1fe88c79d3c936bdf1446168751d24c218",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\ShopOrderMapper.java": "9cc12641316ed735281356e947ce1a1cf122976b5922df1d5bbde0a0ee0955af",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\mapper\\UserAddressMapper.java": "f5f6c2e0f69b75ae1b6339d0a8bd07b93e089168ec21ce5bc3ef68b9590d6a5c",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\security\\LoginFailureHandler.java": "81f6d167504f83fde613d7948d8d4257c3fd7e9a597682d7257149258f9aa101",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\security\\LoginSuccessHandler.java": "15ba1e1896e52880e08790d0d8ceece14692b05ea42d925b48651f58b320a727",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\AddressService.java": "6eaaaa422c18228a7054bf066981ee651dc9534138f0e49f99c87d2c2edf4680",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\AiClient.java": "c009cacaf76710e8117e98ca715d5486d29156035e4a2ac9665dffcba06e4cf7",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\AiModelStreamService.java": "930be7128ec461748d9876d1238a1100c8b89cd97d6d303e157d37926f02c437",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\AiStreamJsonCodec.java": "da1fb0fb1e4370255a42befe7ed081e1088a4c459764677fe7bad32d01ec2747",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\AppUserDetailsService.java": "810f319524473e25205004199d1d0ec83d42c235dbd5554b346722f1ef7adeba",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\AssistantService.java": "28e75dd287345c5a1f1164d087668e8d79642166b689332d475b73fe1ceb5797",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\AssistantStreamService.java": "8aab53976a25259ce5be80d77928b0eeac03723d6936f5ea13169fb339c9ca2a",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\AuthService.java": "45d1fcfdfca6309ba7778a3cf11f85bdc44680ecbd75126719123b0c1e69e3c7",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\CartActionService.java": "c613c74d115a07af1286d3d5e1ee2fe41922471750b8e110051806871897cbaa",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\CartService.java": "63ac0ff1ba940024a5246a89f4b2e3bcf650959118fc04e27bdabba6c040b9db",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\CartToolPrepareService.java": "d8e1edb59609e02c941a29258ff9c16384449a01fc73bc5f8e0632696c6316e3",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\ChatConversationService.java": "6851a8f5f5cd88d6e8041534206531f2db26ec2b0ed04ea4fa32bb91d4b02537",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\ChatMessageSendService.java": "1316c5da5d5634a5d0a10171f081fa94b2b3c8540f9e611cd573cc53793b0b4c",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\ChatMessageService.java": "add7dfa22e461f41ee8aa204022e086afb194758ab193afe2f84523cc352f35d",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\ChatMessageStreamService.java": "1a838d1453aa700ffd61fa149339f5c3892a0d18f7b7d6cc29f2f4f9caac1430",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\ChatMessageWriteService.java": "07caaef5351508b9546cafdc8c663046357e53d650742ef83a1fac9d67c0fe48",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\CheckoutService.java": "c069dd9e68d088ca19f14bbfcc1970833ada8f069fe50373632aeda539e53921",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\ConversationTurnService.java": "bb72b2b43ad66028047214268f2e734d3b9ff6f1e99ed077c579819a48c3036b",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\CurrentUserService.java": "ae99ca75305adeef0a31143842b6ed1970fbf85ca5b581cf033dadfba2ce0afd",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\MockPaymentGateway.java": "90e7031a1e95ffb5cee21db30b90f08ba9079b0de055539c77059bffc13a16d3",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\OrderCloseService.java": "b5db56be385728be64b6c996123f64aad7b3349ef6fe5dfcaa563b567b394315",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\OrderCreateService.java": "c6219115a15c2d9ee14486be856da86d3e9f3e0253b548fd0938caa869688514",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\OrderExpiryJob.java": "c7544b918918d6ebfc1aef6e370fb2ca2edf135ca5c3820959fbd24d3e6bf477",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\OrderExpiryService.java": "8b544f89ff951e93a6ebab4d4eb2998cac8702dcc9a889e7abd8380db131dd73",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\OrderReadService.java": "99d05ad158944d9514e740490383e0dbf6b49ed28bd08cac9ec5df656bdcc593",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\OrderRequestService.java": "0e2159c322ec473525623b36e4578e111d378259c9f1d8accd014b936f9d4b0b",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\OrderWriteService.java": "b5651116439b457d199d452aefc7091762b3d698793025614d64f0c4d1cd550e",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\PaymentGateway.java": "f199c105f7e9d7b641c5c9aa2df0650e0bdf972eb210ccb6573ae65d86aeb839",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\PaymentReadService.java": "cc5e42caa5e36f5cdd42de3065bd60f69ab17b7db5bda1b12d4925adda04a8d1",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\PaymentReconciliationJob.java": "0c2c6502a87ab2c4472f136e4c11940e7b415ee2e05851e357cf717af4874f58",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\PaymentReconciliationService.java": "228bab9eaa99165966b835582c53864192c2943adade45e6ccfe43e7fe51bda5",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\PaymentService.java": "9c396b304c90b1740943453db31b1042f7f51d3066d3b80aabdd3b6f06f9d70b",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\PaymentSettlementService.java": "05d26aa478c7f8102b90a0a0ff05dc678d65349a7b8f536c5247866daa153469",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\PaymentWriteService.java": "9f241f79af754033bb87da3f707fbf10c0bd876d921f7885949b30b959c55304",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\ProductService.java": "f9ba87a3e9be09133652baf5537b92d365d0772e4b4b8aa7d00d002236452f66",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\RecommendationJsonCodec.java": "fca45adbe96c085fbdca96674510521f0f3554b5d4cba77b83b59173b864ff38",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\RecommendationSourceService.java": "74a19690a6a582867727e43767f0b370292ab3bfb3df8a999494b919f73effc9",
+    "backend\\src\\main\\java\\com\\wwzyhy\\shopagent\\service\\ToolMessageWriteService.java": "2c3ecd564ca7941d6ebbd6035a5b653ead6c8186525e262f0e30f163f83c1c43"
+  },
+  "jar_sha256": "becacfccc188f5dedceff4d6bf24a06412d10b5322c86eaadaaf819544c9f737",
+  "model_calls": 0,
+  "ddl_or_grants_executed": false,
+  "session_mode": "only temporary audit processes exclude Redis Session auto-configuration; native Tomcat sessions; production config unchanged",
+  "test_users": [
+    {
+      "username": "order_audit_f5a5fc7a_a",
+      "id": 42
+    },
+    {
+      "username": "order_audit_f5a5fc7a_b",
+      "id": 43
+    }
+  ],
+  "retained_test_orders": [
+    145,
+    146,
+    147,
+    148,
+    149,
+    150,
+    151,
+    152,
+    153,
+    154,
+    155,
+    156,
+    157,
+    159
+  ],
+  "linux_operations": false,
+  "initial": {
+    "base": {
+      "version": "8.0.34",
+      "database": "shopagent",
+      "account": "shopagent_app@127.0.0.1",
+      "grants": [
+        "GRANT USAGE ON *.* TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT ON `shopagent`.`app_users` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT, UPDATE ON `shopagent`.`cart_actions` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT, UPDATE, DELETE ON `shopagent`.`cart_items` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT, UPDATE ON `shopagent`.`chat_conversations` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT ON `shopagent`.`chat_messages` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT ON `shopagent`.`mock_payment_receipts` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT ON `shopagent`.`order_items` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT, UPDATE ON `shopagent`.`payment_attempts` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT, UPDATE ON `shopagent`.`product_inventory` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT, UPDATE ON `shopagent`.`products` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT, UPDATE ON `shopagent`.`shop_orders` TO `shopagent_app`@`127.0.0.1`",
+        "GRANT SELECT, INSERT, UPDATE, DELETE ON `shopagent`.`user_addresses` TO `shopagent_app`@`127.0.0.1`"
+      ],
+      "counts": {
+        "chat_conversations": 31,
+        "app_users": 37,
+        "cart_items": 0,
+        "user_addresses": 0,
+        "chat_messages": 163,
+        "product_inventory": 30,
+        "products": 41,
+        "cart_actions": 34,
+        "shop_orders": 102,
+        "order_items": 113
+      },
+      "formal_write_service_is_proxy": true,
+      "formal_read_service_is_proxy": true
+    },
+    "original_overdue": 0,
+    "expiry_job_disabled": true
+  },
+  "owned_runtime": {
+    "bridge_pid": 20916,
+    "jar_pid": 5428,
+    "temporary_java_port": 59039
+  },
+  "fixture_products": {
+    "p": 48,
+    "q": 49,
+    "r": 50
+  },
+  "scheduled_worker_pids": [
+    2340,
+    8560
+  ],
+  "completed": true,
+  "cleanup": {
+    "test_addresses_removed": 2
+  },
+  "final": {
+    "app_users_original_rows_unchanged": true,
+    "products_original_rows_unchanged": true,
+    "cart_items_original_rows_unchanged": true,
+    "cart_actions_original_rows_unchanged": true,
+    "chat_conversations_original_rows_unchanged": true,
+    "chat_messages_original_rows_unchanged": true,
+    "user_addresses_original_rows_unchanged": true,
+    "product_inventory_original_rows_unchanged": true,
+    "shop_orders_original_rows_unchanged": true,
+    "order_items_original_rows_unchanged": true,
+    "retained_order_ids": [
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      159
+    ],
+    "retained_user_ids": {
+      "a": 42,
+      "b": 43
+    },
+    "retained_product_ids": {
+      "p": 48,
+      "q": 49,
+      "r": 50,
+      "admin": 51
+    },
+    "test_reservations": 0,
+    "pending_test_orders": 0
+  },
+  "owned_processes_stopped": true,
+  "source_hashes_unchanged": true,
+  "summary": {
+    "checks": 108,
+    "passed": 108,
+    "failed": 0
+  }
+}

@@ -19,4 +19,6 @@ dialog{padding:0;border:1px solid var(--ink);border-radius:var(--radius);width:m
 
 .brand-context{font-size:14px;color:var(--muted);margin-bottom:14px}
 
+@media(max-width:720px){.store-nav{overflow-x:auto;justify-content:flex-start;gap:22px;scrollbar-width:thin}.store-nav>a{flex:0 0 auto}}
+
 .guide-promo>div>p{font-size:16px;line-height:1.85;margin-block:20px}.guide-example>p{margin:0!important;font-size:13px!important}.guide-promo>div>p+ .primary{margin-top:6px}

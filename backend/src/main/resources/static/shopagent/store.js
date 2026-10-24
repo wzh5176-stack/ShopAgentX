@@ -59,6 +59,7 @@
     $("store-logout").hidden = !state.user;
     $("store-cart-count").textContent = state.authLoading || state.user && !state.cart ? "—" : String(state.cart?.totalQuantity || 0);
     updateDetail();
+    document.dispatchEvent(new CustomEvent("shopagent-session", { detail: { username: state.user, loading: state.authLoading, epoch: state.epoch } }));
   }
   function showAuth() { if (!$("store-auth").open) $("store-auth").showModal(); }
   $("store-account").addEventListener("click", showAuth);
@@ -238,7 +239,7 @@
     const summary = el("aside", "cart-summary"); summary.setAttribute("aria-label", "购物车合计"); summary.append(el("h2", "", "这次的挑选"));
     const qty = el("div", "summary-line"); qty.append(el("span", "", "商品件数"), el("span", "", state.cart.totalQuantity + " 件"));
     const amount = el("div", "summary-line"); amount.append(el("span", "", "商品合计"), el("strong", "cart-amount", "¥" + state.cart.totalAmount));
-    summary.append(qty, amount, el("p", "help", "合计仅计算当前可用商品。当前可保存购物车，订单结算尚未开放。"), link("继续选购 ↗", "./products.html", "primary"), link("让 AI 帮我比较 →", "./play.html", "text-link"));
+    summary.append(qty, amount, el("p", "help", "最终金额与可购买数量将在结算时重新核对。"), link("去结算 →", "./checkout.html", "primary"), link("继续选购", "./products.html", "text-link"));
     const refresh = btn("刷新购物车", "secondary cart-refresh", () => { if (!state.cartBusy) loadCart(); }); refresh.id = "cart-refresh";
     layout.append(list, summary); $("cart-page-body").replaceChildren(layout, refresh);
     if (state.cartBusy || state.cartLoading) lockCartControls();
@@ -322,5 +323,6 @@
   document.querySelector(`[data-nav="${page === "product" ? "products" : page}"]`)?.setAttribute("aria-current", "page");
   window.addEventListener("pageshow", e => { if (e.persisted) session(); });
   window.addEventListener("focus", () => { if (!state.authBusy && !state.cartBusy && !state.detailBusy) session(); });
+  window.ShopAgentStore = { api, showAuth, toast, picture, getSession: () => ({ username: state.user, loading: state.authLoading, epoch: state.epoch }) };
   session();
 })();

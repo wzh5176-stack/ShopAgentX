@@ -20,6 +20,11 @@ import org.springframework.http.MediaType;
 @RestControllerAdvice(basePackages = "com.wwzyhy.shopagent.controller")
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFound() {
+        return errorResponse(404, "NOT_FOUND", "请求的资源不存在");
+    }
+
     private static final Logger log =
             LoggerFactory.getLogger(GlobalExceptionHandler.class);
 

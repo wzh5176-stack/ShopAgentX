@@ -59,3 +59,17 @@ backups/
 
 # 本地设计检查输出
 .taste-skill/
+
+# Machine-specific deployment activation and rollback copies
+deploy/.trade-runtime-enabled
+deploy/releases/
+deploy/verification/
+
+# Local teaching history and raw verification materials
+/AGENTS.md
+/PROJECT_STATE.md
+docs/local/
+docs/mobile/
+docs/verification/
+docs/TRADE_DEPLOYED_OPERATIONS.md
+backend/sql/sql/

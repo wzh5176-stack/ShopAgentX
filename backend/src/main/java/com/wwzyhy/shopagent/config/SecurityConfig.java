@@ -64,6 +64,14 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/payments/alipay/notify").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/payments",
+                        "/api/payments/*/refresh",
+                        "/api/payments/*/mock-result",
+                        "/api/payments/alipay/page", "/api/payments/alipay/*/page")
+                .hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/api/payments/*")
+                .hasRole("USER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,
                         "/api/health",
@@ -110,8 +118,32 @@ public class SecurityConfig {
                         "/api/conversations/*/cart-actions/*/confirm",
                         "/api/conversations/*/cart-actions/*/cancel")
                 .hasRole("USER")
+                .requestMatchers(HttpMethod.GET,
+                        "/api/addresses",
+                        "/api/addresses/*")
+                .hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/api/addresses")
+                .hasRole("USER")
+                .requestMatchers(HttpMethod.PUT,
+                        "/api/addresses/*",
+                        "/api/addresses/*/default")
+                .hasRole("USER")
+                .requestMatchers(HttpMethod.DELETE, "/api/addresses/*")
+                .hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/api/checkout/preview")
+                .hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/api/orders")
+                .hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/api/orders", "/api/orders/*", "/api/orders/*/payments")
+                .hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/api/orders/*/cancel")
+                .hasRole("USER")
                 .anyRequest().denyAll()
         );
+
+        http.csrf(csrf -> csrf.ignoringRequestMatchers(request ->
+                "POST".equals(request.getMethod())
+                        && "/api/payments/alipay/notify".equals(request.getServletPath())));
 
         http.httpBasic(basic -> basic
                 .authenticationEntryPoint(unauthorizedHandler)

@@ -1,0 +1,19 @@
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+
+# Keep normal TLS verification and add the same local trust roots used by AI.
+COPY certificates/windows-roots.pem /tmp/shopagent-roots.pem
+RUN set -eu; \
+    awk '/BEGIN CERTIFICATE/{n++; f=sprintf("/tmp/shopagent-ca-%03d.pem",n)} f{print >f} /END CERTIFICATE/{close(f);f=""}' /tmp/shopagent-roots.pem; \
+    for cert in /tmp/shopagent-ca-*.pem; do \
+      keytool -importcert -noprompt -trustcacerts -alias "$(basename "$cert" .pem)" \
+        -file "$cert" -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit >/dev/null 2>&1; \
+    done; \
+    rm /tmp/shopagent-ca-*.pem /tmp/shopagent-roots.pem; \
+    groupadd --gid 10001 shopagent; \
+    useradd --uid 10001 --gid shopagent --no-create-home shopagent
+
+COPY --chown=shopagent:shopagent target/shopagent-backend-1.0-SNAPSHOT.jar app.jar
+USER shopagent
+EXPOSE 8888
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

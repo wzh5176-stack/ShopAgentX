@@ -1,5 +1,85 @@
 # ShopAgent 接口约定与阶段记录
 
+2026-10-24通知/补偿/页面已实现并集中验，见[交付验收](TRADE_COMPLETION_ACCEPTANCE.md)。POST /api/payments/alipay/notify仅精确POST免登录CSRF，表单RSA2 V1验签/身份金额时间核对，成功提交后纯文本success，非法400 failure、内容类型415、超限413、未提交503 failure。GET /api/payments/options仍USER，返回mockEnabled/alipaySandboxEnabled；GET /api/orders/{id}/payments本人最近20条items；POST /api/payments/alipay/{id}/page本人+CSRF恢复原支付key签名。原接口保护保留。官方补偿默认30秒/批20（沙箱启用时），轮转查PENDING，独立入账。通知和查单同一交易允许时间来源差异，保留首次可信时间。真实回调域名、真实沙箱付款待第四步用户手动。
+
+2026-10-24最新取消/超时已接官方协调，POST /api/orders/{id}/cancel仍USER+本人+CSRF；WAIT官方确认关闭→独立保存支付CLOSED→本地关闭/释放，正常200，重复不重复释放。已付款查单入账后取消409 ORDER_CONFLICTED。SDK查询/关单503 ALIPAY_QUERY_UNAVAILABLE/ALIPAY_CLOSE_UNAVAILABLE，模糊CLOSED/链接仍有效409并保留库存。NOT_FOUND仅付款链接截止后另5分钟且再查无交易才结束。已保存关闭结果而本地释放待重试时，不能再新建官方或MOCK支付。自动超时复用同一协调；付款抢先成功则PAID不EXPIRED。432项受控检查通过，尚无真实沙箱/通知，详[关单验收](ALIPAY_CLOSE_ACCEPTANCE.md)。
+
+2026-10-24最新：POST /api/payments/{id}/refresh已按MOCK/ALIPAY_SANDBOX分流，USER/本人/CSRF沿用。官方PENDING用SDK事务外查单→新事务核对和入账；成功/完成为SUCCEEDED，订单PAID且消费预占同事务，保存provider_trade_no/provider_paid_at。NOT_FOUND/WAIT/CLOSED当前保留PENDING/库存；官方失败/签名或数据异常503 ALIPAY_QUERY_UNAVAILABLE。已终态直接返回不再次外呼，沙箱关闭时待处理官方单刷新503；MOCK结果仍拒官方404。244项受控技术/回归通过，未真实沙箱付款；详[查询验收](ALIPAY_QUERY_ACCEPTANCE.md)。官方关单/通知仍待实现，下面旧refresh官方409是历史。
+
+2026-10-24付款入口已验：POST /api/payments/alipay/page（沙箱开关true）接收orderId/requestKey，本人USER+CSRF，200/no-store，data={payment:PaymentResponse,outTradeNo,payUrl}。同键同支付/交易号，签名URL可随时间戳变化；新键遇活动支付409，状态/临近到期409；归属404，匿名401、ADMIN-only/CSRF403、校验400。官方PENDING暂阻本地取消/过期释放；旧refresh官方409，MOCK结果官方404，扫描仅MOCK。详见[付款入口验收](ALIPAY_CHECKOUT_ACCEPTANCE.md)。正式JAR受控技术检查96项通过；没有官方查单/关单/通知/结算或实际收银台验证。下面旧候选描述为历史。
+
+## 阶段11模拟支付正式协议（2026-10-24已验）
+
+本机后端已验，见[模拟支付验收](MOCK_PAYMENT_ACCEPTANCE.md)。以下紧接的“尚无支付API/DTO教案”是历史，不作为当前实现判断。
+
+| 方法路径 | 语义 |
+| --- | --- |
+| POST /api/payments | orderId/requestKey，服务端订单金额/期限，首次201/同键200，Location详情，data为支付DTO |
+| GET /api/payments/{id} | 本人支付详情，只读200 |
+| POST /api/payments/{id}/refresh | 后端查渠道并尝试结算/过期，200支付DTO，CSRF，无请求正文 |
+| POST /api/payments/{id}/mock-result | 仅显式模拟开关true注册；outcome为SUCCEEDED或FAILED，先持久结果再查单结算，200；改写旧结果409 |
+
+全部USER与本人归属，POST沿用CSRF；匿名401/仅ADMIN403/CSRF403。他人支付404 PAYMENT_NOT_FOUND、创建时他人订单404 ORDER_NOT_FOUND；参数400 INVALID_ARGUMENT；状态/锁/已有待处理不同键409 PAYMENT_CONFLICTED。开关默认false，模拟路由404、新创建503 PAYMENT_UNAVAILABLE，历史查询/刷新仍可用。相同订单相同支付key回放历史（包括FAILED/CLOSED），新key遇PENDING/SUCCEEDED为409，不采用旧教案的复用候选；失败后新key可重试。支付key与下单key属于不同操作。
+
+PaymentResponse字段id/orderId/channel/status/amount/expiresAt/finishedAt/createdAt/updatedAt，amount两位字符串；外包data，无requestKey/用户ID。SUCCEEDED/订单PAID/消费预占同事务；FAILED不释放订单库存；取消与过期同事务关PENDING支付并释放预占。模拟回执独立持久，refresh/默认30秒后台补偿复用结算。完整调用与竞态边界见[使用说明](MOCK_PAYMENT_USAGE.md)。官方沙箱通知/验签/API尚未实现。
+
+2026-10-24支付DTO教案（尚无API）：PaymentCreateRequest仅orderId/requestKey；PaymentResponse为id/orderId/channel/status/amount/expiresAt/finishedAt/createdAt/updatedAt，金额两位字符串，状态PaymentStatus；内部PaymentCreateResult(created,data)用于以后决定201/200，正文只包data。完整示例与解析见[五文件手写课](PAYMENT_ENTITY_AND_DTO_MANUAL_STEPS.md)，不是运行结果。
+
+2026-10-24阶段11开始手写，当前仅[支付表与状态教案](MOCK_PAYMENT_FOUNDATION_MANUAL_STEPS.md)，尚无支付API。拟独立支付尝试由本人订单关联，金额读取订单、到期不晚于订单、同单同键回放；失败可新键重试，成功由后端渠道结果复核并同事务更新支付/订单/预占。此段为设计边界，不能当作已开放路由。
+
+## 阶段10订单协议（2026-10-24本机后端已验）
+
+用户授权直接完成阶段10剩余组，当前174源码正式构建成功，生命周期108项＋当前构建建单回归96项通过，见[生命周期验收](ORDER_LIFECYCLE_ACCEPTANCE.md)。本机阶段10后端完成，支付/交易页面/Linux迁移尚未实现。
+
+| 方法路径 | 行为与响应 | 当前状态 |
+| --- | --- | --- |
+| POST /api/checkout/preview | 只读复核本人地址、在售商品现价和库存；200 data含地址、商品小计与总额，不预占 | 本机已验 |
+| POST /api/orders | 订单/明细/库存同事务；首次201、相同请求回放200，两者Location指向详情，正文data | 本机已验 |
+| GET /api/orders/{id} | 本人订单详情与购买快照，200 data | 本机已验 |
+| GET /api/orders | 本人订单分页列表，200 data分页对象 | 本机已验 |
+| POST /api/orders/{id}/cancel | 未到期待支付单变CANCELLED，到期变EXPIRED，释放一次预占，200 data详情；已支付409 | 本机已验 |
+
+上表全部要求USER，三个POST保留CSRF。匿名401、仅ADMIN角色403、缺失/串用CSRF403。非法请求400 INVALID_ARGUMENT；他人/不存在订单404 ORDER_NOT_FOUND，他人/不存在地址404 ADDRESS_NOT_FOUND；商品不可售/库存不足/总额0为409 CHECKOUT_UNAVAILABLE，同键异内容/SQL唯一或锁竞争/取消PAID为409 ORDER_CONFLICTED。OrderExceptionHandler只作用OrderController、最高Order，其余保留GlobalExceptionHandler语义。取消不要求请求正文。
+
+列表参数page默认1且>=1，size默认10且1—50；可选status为大写四状态枚举，非法值400。按id倒序，data包含items/page/size/total/pages；items每项id/status/totalAmount/expiresAt/createdAt，不带明细与私有请求字段。
+
+预览请求只收addressId与items(productId,quantity)，建单另加requestKey（标准小写UUID、同一次下单重试沿用）。1—20种、每种1—99、重复productId拒绝；userId来自Authentication，真实价格/状态/商品及收货文本来自Java查询，不采纳客户端金额。本轮总应付>0，0元专用流程另议；金额响应统一两位小数字符串。
+
+CheckoutPreviewResponse含address（复用AddressResponse：id/六文本/defaultAddress/createdAt/updatedAt）、items（productId/title/brand/imageUrl/unitPrice/quantity/lineAmount）与totalAmount，外包data。预览只读，不承诺后续库存/价格，建单必须重新核价和原子预占。缺库存行按不足处理，不当无限库存。
+
+OrderRequestService对addressId及按productId排序的编号/数量组成addressId|productId:quantity;...再SHA-256，排除requestKey、现价、地址文本。相同用户同键同内容优先回放原单（包括后来关闭的单），不重复预占；同键换内容409，不同键可新建。唯一索引兜底配合Service比较hash和失败事务外回查，不只靠索引。商品改价/下架、原地址修改/删除后，未变的重试仍返回购买快照。
+
+OrderDetailResponse含id/status/totalAmount/address/items/expiresAt/paidAt/closedAt/createdAt/updatedAt；address仅六项订单地址快照，不依赖常用地址仍存在；items含id/productId/title/brand/imageUrl/unitPrice/quantity/lineAmount，来自order_items快照。响应不返回userId/requestKey/requestHash；created内部标记只供Controller决定201/200。
+
+OrderCreateService无事务先查旧单；独立REQUIRES_NEW OrderWriteService当前锁本人地址和排序在售产品FOR SHARE核价，先插主单争唯一键，再按序reserve/插明细，写后当前读，代理提交后返回。失败回滚完外层独立OrderReadService回查相同键，匹配则回放，无旧单原异常上抛。真实并发同键200/201、不同内容201/409、最后1件两用户201/409已覆盖。OrderReadService.get先检查id+本人user_id再查明细，读操作不自动取消过期订单。
+
+订单状态PENDING_PAYMENT/PAID/CANCELLED/EXPIRED；创建有效期15分钟。正式取消/过期同事务锁订单、按product_id排序释放明细库存并关闭；重复取消已关闭单200回放、不再释放，库存不一致500并整单回滚。自动任务默认启动30秒后开始、每轮结束30秒后再扫，最多100个到期候选，每单独立事务；多实例靠数据库锁和终态复核，未开放过期HTTP接口。GET不自动改变状态，任务有处理延迟。新增商品同事务建立可售0/预占0库存。支付消费和支付单/查单补偿留阶段11；失败不能混成订单PAYMENT_FAILED。Linux/Redis共享会话/交易页面本轮未更新。
+
+## 第二版地址协议（2026-10-23，本机后端已验收）
+
+阶段9正式源码构建与本机MySQL/HTTP/事务验收111项通过，见[地址验收报告](ADDRESS_ACCEPTANCE.md)。AddressController提供以下六路由，Security要求USER并保留CSRF。专用Advice以assignableTypes限定地址Controller、Order最高优先，404与DuplicateKey/PessimisticLockingFailure的409在事务回滚后处理，不改变其他模块通用异常语义。同值修改、默认切换和删除接替、当前读及并发已覆盖；页面和Linux部署未更新。
+
+用户已开启第二版订单/地址/模拟与官方沙箱支付；范围和时序以DEVELOPMENT_PLAN.md为准。此处是已实现的阶段9后端协议；订单当前实现范围见上方阶段10，支付API仍未实现。
+
+| 方法路径 | 语义 | 成功响应 |
+| --- | --- | --- |
+| GET /api/addresses | 当前用户的地址列表，默认优先，再按id升序 | 200，data.items数组 |
+| POST /api/addresses | 新增本人地址，第一条自动默认，其余非默认 | 201＋Location，data为地址DTO |
+| GET /api/addresses/{id} | 本人单地址 | 200，data为地址DTO |
+| PUT /api/addresses/{id} | 全量修改六项地址文本；默认标记用专门入口修改 | 200，data为地址DTO |
+| PUT /api/addresses/{id}/default | 设为本人默认地址，无请求正文 | 200，data为地址DTO |
+| DELETE /api/addresses/{id} | 删除本人地址；若删默认且仍有地址，id最小者接替默认 | 204，无正文 |
+
+写入文本字段为recipientName(1—50)、phone(最多20)、province/city/district(各1—50)、detailAddress(1—200)；record紧凑构造器先strip两端空白，null保留给NotBlank拒绝。电话基础格式为6—20个ASCII数字、可前导+，并受总长度20限制；不验证真实号码归属或发短信。请求不包含userId/id/defaultFlag/时间字段，这些字段不参与后端归属或默认判断。省市区先存文本，不接地图/行政区服务。Service显式调用Validator复用DTO校验，Controller通过Valid处理HTTP输入。
+
+017表及018本地最小权限已在真实MySQL8.0.34/shopagent、shopagent_app@127.0.0.1连接确认。测试进程仅临时排除Redis Session自动配置，登录/Cookie/CSRF使用Tomcat原生会话；正式配置不变，不把本次测试扩展为Redis/部署验收。
+
+响应字段：id、recipientName、phone、province、city、district、detailAddress、defaultAddress(boolean)、createdAt、updatedAt；不返回userId或数据库辅助生成列。金额与地址订单快照在阶段10另定，不能让旧订单直接跟随用户修改地址。
+
+身份重用CurrentUserService；全部地址路由要求USER，所有写请求保留CSRF。无权访问或不存在的地址统一404 ADDRESS_NOT_FOUND；输入错误400 INVALID_ARGUMENT；合法请求遇默认地址并发竞争等可重试冲突409 ADDRESS_CONFLICTED；数据库不可用沿用503。匿名/角色/CSRF仍由现有Security链处理。
+
+新增/切换默认/删除默认放事务中；查询锁定本人地址行按固定顺序，唯一生成列索引兜底“最多一默认”，处理空集合与唯一键/死锁竞争回滚，不给app_users额外UPDATE权限来锁用户。重复设同一默认返回原结果；他人ID不泄露地址信息。真实首次创建竞争出现201/409且默认约束保持；锁超时返回409并未写入，故障回滚测试通过，客户端遇409应刷新后重试。
+
 2026-10-22当前状态：Spring Session已用于完整Linux双Java共享登录，Cookie为JSESSIONID，运行配置Redis namespace为shopagent:runtime:session；用户停A后身份/商品/cart反馈正常，助手另核恢复后六healthy。已有商城、本人会话多轮流、turns待确认/confirm/cancel、资料问答，当前入口列表见根README与实际Controller/SecurityConfig。下方按日期保留的“候选/待验”是历史记录，不能替代后续验收；本轮状态以RUNTIME_RUNBOOK.md、REDIS_CLUSTER_ACCEPTANCE.md、MYSQL_RESTORE_CHECK_ACCEPTANCE.md为准。没有订单支付或网站接入Cluster的新API。
 
 2026-10-20会话共享接入教学候选（未实现/未验）：计划Spring Session把原HttpSession存到专用Redis，HTTP路径/登录表单/本人权限/CSRF规则不变，显式Cookie名JSESSIONID兼容原logout；Boot4.1属性spring.session.data.redis.namespace=shopagent:session，空闲timeout30m。迁移后旧内存登录不自动转移，需重新登录；跨Java会话与退出/故障语义待实际集中验收。见SESSION_REDIS_MANUAL_STEPS.md，不把候选当正式协议运行结果。

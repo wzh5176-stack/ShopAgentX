@@ -1,8 +1,14 @@
 # ShopAgent · 跳糖选物
 
+2026-10-24更新：交易新版已部署到本地VMware Linux，入口 http://127.0.0.1:8080/shopagent/home.html 。原库备份并隔离恢复验证后增量升级到12表，双Java/Nginx/Redis/MySQL/AI共6容器健康，运行、备份、回退及沙箱验收边界见[新版运行说明](docs/TRADE_DEPLOYMENT.md)。临时通知隧道有会话限制，不能作为生产固定域名；Linux未代付新单，真实官方待付款主动关单仍未实测。下方早期“Linux仍首版”是历史进度。
+
 商品浏览、购物车与AI导购结合的学习实践项目。Java负责可信业务与数据，Python负责模型和检索，网页提供商品浏览、多轮聊天、资料问答和人工确认操作。
 
 当前首版已完成核心功能、本地Linux容器部署与下述演练，成果记录截至2026-10-22。项目参考[ShopAgent-X](https://github.com/EvanYao826/ShopAgent-X)的设计和学习路线，具体阅读范围见[参考笔记](docs/REFERENCE_GUIDE.md)；本仓库的实现范围以自身代码和验收记录为准。
+
+## 第二版交易扩展进展
+
+2026-10-24本机后端已完成地址、订单库存和本地模拟支付：可信核价/幂等快照、本人列表详情、取消与自动超时、模拟成功/失败重试、持久结果回执、重启与后台查单补偿。最终构建369项技术检查全部通过，见[模拟支付验收](docs/MOCK_PAYMENT_ACCEPTANCE.md)及[本地开关与接口](docs/MOCK_PAYMENT_USAGE.md)。官方付款入口已通过[96项受控验收](docs/ALIPAY_CHECKOUT_ACCEPTANCE.md)，查单与成功结算已通过[验收](docs/ALIPAY_QUERY_ACCEPTANCE.md)，关单及取消超时协调通过[同构建432项检查](docs/ALIPAY_CLOSE_ACCEPTANCE.md)；[通知验签、官方补偿与交易页面已集中验收](docs/TRADE_COMPLETION_ACCEPTANCE.md)，下一由用户手动进行真实沙箱联调，Linux迁移随后完成，现有Linux演示栈仍是首版。下方功能/运行结构以首版成果为主。
 
 ## 已实现
 
@@ -14,7 +20,7 @@
 - 部署：Docker Compose组织MySQL、Redis、Python、双Java实例与Nginx；Spring Session共享登录会话。
 - 演练：单Java实例停止与恢复；独立RedisCluster三主三从、分片复制与主故障提升；业务SQL备份及隔离恢复。
 
-当前没有订单支付、地址物流、Android客户端或LangGraph图编排。RedisCluster是独立实验，网站共享会话仍使用原单节点Redis；单VM部署保留基础设施单点，未做公网生产上线。
+首版演示不含订单支付、地址物流、Android客户端或LangGraph图编排；第二版本机进展见上节。RedisCluster是独立实验，网站共享会话仍使用原单节点Redis；单VM部署保留基础设施单点，未做公网生产上线。
 
 ## 技术组成
 
