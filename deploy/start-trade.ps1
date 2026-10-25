@@ -6,7 +6,7 @@ $shopagentSsh = 'D:\VMware work\ShopAgent-Ubuntu24\access\ssh_config'
 New-Item -ItemType Directory -Path $shopagentWork -Force | Out-Null
 
 # Publishable templates stay separate from this machine's ignored runtime URL.
-& scp.exe -q -F $shopagentSsh (Join-Path $PSScriptRoot 'runtime.sh') (Join-Path $PSScriptRoot 'compose.trade.yml') 'shopagent-linux:/home/shopagent/shopagent/deploy/'
+& scp.exe -q -F $shopagentSsh (Join-Path $PSScriptRoot 'runtime.sh') (Join-Path $PSScriptRoot 'compose.trade.yml') (Join-Path $PSScriptRoot 'compose.inventory.yml') 'shopagent-linux:/home/shopagent/shopagent/deploy/'
 if ($LASTEXITCODE -ne 0) { throw 'Runtime template upload failed' }
 $shopagentLocalEnv = Join-Path $PSScriptRoot '.env.trade.local'
 if (Test-Path $shopagentLocalEnv) {
