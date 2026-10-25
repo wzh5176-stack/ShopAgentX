@@ -12,7 +12,7 @@ RUN apt-get update \
 RUN groupadd --gid 10001 shopagent \
     && useradd --uid 10001 --gid shopagent --no-create-home shopagent
 
-COPY requirements.txt requirements-embedding.txt ./
+COPY requirements.txt requirements-api.txt requirements-embedding.txt ./
 
 RUN python -m pip install --no-cache-dir -r requirements.txt
 

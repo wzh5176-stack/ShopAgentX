@@ -6,6 +6,7 @@ public record ProductDetailResponse(
         String brand,
         String price,
         String imageUrl,
-        String description
+        String description,
+        int availableQuantity
 ) {
 }

@@ -62,6 +62,7 @@ backups/
 
 # Machine-specific deployment activation and rollback copies
 deploy/.trade-runtime-enabled
+deploy/.inventory-runtime-enabled
 deploy/releases/
 deploy/verification/
 

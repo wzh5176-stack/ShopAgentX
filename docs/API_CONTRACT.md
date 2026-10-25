@@ -1,5 +1,7 @@
 # ShopAgent 接口约定与阶段记录
 
+2026-10-25商品资料与RAG更新：`POST /api/assistant/knowledge`请求扩展为`{question,productId?}`，可选正整数商品ID由Java核对在售商品，名称/品牌由数据库读取，再发送Python`{question,productTitle?,productBrand?}`。旧只传问题的调用保留，但必须问题中有唯一型号，否则先澄清。Python名称品牌同时提供，额外字段/不完整身份422。当前36份新商品资料+独立K1样例，先按型号限定候选再检索，引用标题带资料版本；错误型号/缺资料正常`answerable=false,sources=[]`，不存在/不可售的指定商品400，检索/生成异常沿用503。响应source字段及原有权限/CSRF规则不变。详见[商品资料与RAG](CATALOG_RAG.md)。
+
 2026-10-24通知/补偿/页面已实现并集中验，见[交付验收](TRADE_COMPLETION_ACCEPTANCE.md)。POST /api/payments/alipay/notify仅精确POST免登录CSRF，表单RSA2 V1验签/身份金额时间核对，成功提交后纯文本success，非法400 failure、内容类型415、超限413、未提交503 failure。GET /api/payments/options仍USER，返回mockEnabled/alipaySandboxEnabled；GET /api/orders/{id}/payments本人最近20条items；POST /api/payments/alipay/{id}/page本人+CSRF恢复原支付key签名。原接口保护保留。官方补偿默认30秒/批20（沙箱启用时），轮转查PENDING，独立入账。通知和查单同一交易允许时间来源差异，保留首次可信时间。真实回调域名、真实沙箱付款待第四步用户手动。
 
 2026-10-24最新取消/超时已接官方协调，POST /api/orders/{id}/cancel仍USER+本人+CSRF；WAIT官方确认关闭→独立保存支付CLOSED→本地关闭/释放，正常200，重复不重复释放。已付款查单入账后取消409 ORDER_CONFLICTED。SDK查询/关单503 ALIPAY_QUERY_UNAVAILABLE/ALIPAY_CLOSE_UNAVAILABLE，模糊CLOSED/链接仍有效409并保留库存。NOT_FOUND仅付款链接截止后另5分钟且再查无交易才结束。已保存关闭结果而本地释放待重试时，不能再新建官方或MOCK支付。自动超时复用同一协调；付款抢先成功则PAID不EXPIRED。432项受控检查通过，尚无真实沙箱/通知，详[关单验收](ALIPAY_CLOSE_ACCEPTANCE.md)。

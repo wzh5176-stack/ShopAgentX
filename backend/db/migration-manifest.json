@@ -1,0 +1,167 @@
+{
+  "format": 1,
+  "purpose": "source inventory, not an applied-database ledger",
+  "baseline_sha256_lf": "aa6cc1090b7c3b2ec6fc5166b4a752a5a42a1684e9d2a84c4649042b075e1f08",
+  "expected_tables": [
+    "products",
+    "app_users",
+    "chat_conversations",
+    "chat_messages",
+    "cart_items",
+    "cart_actions",
+    "user_addresses",
+    "product_inventory",
+    "shop_orders",
+    "order_items",
+    "payment_attempts",
+    "mock_payment_receipts",
+    "inventory_replenishments"
+  ],
+  "history": [
+    {
+      "file": "001_create_shopagent.sql",
+      "kind": "schema",
+      "sha256_lf": "54cd61c516e54ab5a4a916e0ac076f7ea2a8a25a4f51bfcde9ba6b569fc4c976"
+    },
+    {
+      "file": "002_seed_products.sql",
+      "kind": "seed",
+      "sha256_lf": "4a968e00e522e5b1ec0955e9ef6335db448f808cb270adbcf2a46ec1a3ed8d0c"
+    },
+    {
+      "file": "003_verify_products.sql",
+      "kind": "verify",
+      "sha256_lf": "5be526d092c7757b50dcfff4c8d25e45a85b1cac1349862df3fbe360b548e7e9"
+    },
+    {
+      "file": "004_create_app_user.sql",
+      "kind": "account",
+      "sha256_lf": "519d6778b5d4e321f880be37e1fde37b8288cb20841ade43dae632eae3b59ed0"
+    },
+    {
+      "file": "005_add_product_logical_delete.sql",
+      "kind": "schema",
+      "sha256_lf": "1e9dd6944203b9967489c3e16813239068f2133bd8a70467ea76d29bbd4c7f1d"
+    },
+    {
+      "file": "006_grant_product_write.sql",
+      "kind": "grant",
+      "sha256_lf": "50a0628f2bf286315fc24c6af40be6db023f50d2fece3b4aee0db35289ce04f8"
+    },
+    {
+      "file": "007_create_app_users.sql",
+      "kind": "schema",
+      "sha256_lf": "5c43b530505592db4411dd2eea010b4a5955524186bcb3ab4ae8a4a0f81d6760"
+    },
+    {
+      "file": "008_grant_app_users.sql",
+      "kind": "grant",
+      "sha256_lf": "0c825e4c108747e410fc75dd70f382ef486d8743f37fd101791d32162384d9ae"
+    },
+    {
+      "file": "009_create_chat_history.sql",
+      "kind": "schema",
+      "sha256_lf": "ab90c6ac77f51e61250d2d6b1c7b0c88066c1c05dfd5355a0bcfe8aaaa2ad4fb"
+    },
+    {
+      "file": "010_grant_chat_history.sql",
+      "kind": "grant",
+      "sha256_lf": "1d70a05297dbd0ad5ce5a841c7ebac1bb12a0202b63341270f63b14f42faf72c"
+    },
+    {
+      "file": "011_add_message_recommendation.sql",
+      "kind": "schema",
+      "sha256_lf": "bd38ac7644925789f1ab9d6e817a2555d52a01a80afe16f66b26b986f236bc4c"
+    },
+    {
+      "file": "012_create_cart_items.sql",
+      "kind": "schema",
+      "sha256_lf": "865e7f4aa5b1015e95fcb0609783170a24055c519b68797cba9b50c4a691910e"
+    },
+    {
+      "file": "013_grant_cart_items.sql",
+      "kind": "grant",
+      "sha256_lf": "b544b94779ba65f7de2790d12a768a4b994dcd404a85b581bef9a4421facacf9"
+    },
+    {
+      "file": "014_create_cart_actions.sql",
+      "kind": "schema",
+      "sha256_lf": "a484a02acd76cb91810c870619bae2208fab3a0d00f06e1933386b335099c9ab"
+    },
+    {
+      "file": "015_grant_cart_actions.sql",
+      "kind": "grant",
+      "sha256_lf": "c6270620e5b75c78cdbe0db8d10abbff28cbe5c11c86f9086aeeae407a923458"
+    },
+    {
+      "file": "016_add_message_cart_operation.sql",
+      "kind": "schema",
+      "sha256_lf": "ac108546fb2ee3ebf00e4c8d7940dcbe5994a167e97b32b290901fb63b3947ad"
+    },
+    {
+      "file": "017_create_user_addresses.sql",
+      "kind": "schema",
+      "sha256_lf": "e15258495bb69546affc7c8bbf9fc794a7981918be2ac6c3f544713cf4a6f629"
+    },
+    {
+      "file": "018_grant_user_addresses.sql",
+      "kind": "grant",
+      "sha256_lf": "a70c2b7dc8577205147d93c315e474011dcc07d7b049000327dc9f53055d111d"
+    },
+    {
+      "file": "019_create_product_inventory.sql",
+      "kind": "schema",
+      "sha256_lf": "439a7d2c1264d59e2d2cc51ff174422db4e96a3dfd077f5cd32876bf77cab6d4"
+    },
+    {
+      "file": "020_grant_product_inventory.sql",
+      "kind": "grant",
+      "sha256_lf": "40dc13bc72185e6504b17f85922cb346a78eb9b6969edae2a48cd5475ff05195"
+    },
+    {
+      "file": "021_create_orders.sql",
+      "kind": "schema",
+      "sha256_lf": "1a9bc4b0399b2696763940544cdb92d1038082363eb931c3bc6a59cfdd337db0"
+    },
+    {
+      "file": "022_grant_orders.sql",
+      "kind": "grant",
+      "sha256_lf": "fa798fe73feec7b5f2c68a268e046f05595809b0f16eee62c9151222697f8aef"
+    },
+    {
+      "file": "023_create_payment_attempts.sql",
+      "kind": "schema",
+      "sha256_lf": "84169d26eb596a0440b01a0571ffacae0d4ffe45e98d484db1a63fa52e95b848"
+    },
+    {
+      "file": "024_grant_payment_attempts.sql",
+      "kind": "grant",
+      "sha256_lf": "0ce2b14b8021edc46c6e586d1cb191d9947c1184a7b2f00ef49dcd8d0a51ba41"
+    },
+    {
+      "file": "025_create_mock_payment_receipts.sql",
+      "kind": "schema",
+      "sha256_lf": "fa1c2d12eac5afe8295622e236aadc04441ce4de97c5de47f0fa082ff1496c7b"
+    },
+    {
+      "file": "026_grant_mock_payment_receipts.sql",
+      "kind": "grant",
+      "sha256_lf": "b1f230bc4f3f568210565caf910b5e0661080e4d5f91a3b38683496bfef6624c"
+    },
+    {
+      "file": "027_extend_alipay_payment.sql",
+      "kind": "schema",
+      "sha256_lf": "5f389156fb57b5f6c1850821cb30259fa3566d4c57b965eb57971fcc2aaf907d"
+    },
+    {
+      "file": "028_create_inventory_replenishments.sql",
+      "kind": "schema",
+      "sha256_lf": "ab4e38c63c0e1ad47ac54a678eeb412768d9c873b623e2bdab5a1afd5cd9b6b0"
+    },
+    {
+      "file": "029_grant_inventory_replenishments.sql",
+      "kind": "grant",
+      "sha256_lf": "ea98fbc95e4bd024744f682effee398f02f1c4e0c79bf49c5a4a52933d5423ef"
+    }
+  ]
+}

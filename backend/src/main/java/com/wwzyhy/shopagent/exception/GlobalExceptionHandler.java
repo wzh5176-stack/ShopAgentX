@@ -20,6 +20,11 @@ import org.springframework.http.MediaType;
 @RestControllerAdvice(basePackages = "com.wwzyhy.shopagent.controller")
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InventoryConflictException.class)
+    public ResponseEntity<Map<String, Object>> handleInventoryConflict(InventoryConflictException ex) {
+        return errorResponse(409, "INVENTORY_CONFLICTED", ex.getMessage());
+    }
+
     @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound() {
         return errorResponse(404, "NOT_FOUND", "请求的资源不存在");

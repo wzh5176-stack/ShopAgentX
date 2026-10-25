@@ -185,9 +185,15 @@ public class AiClient {
 
 
     public AiKnowledgeData askKnowledge(String question) {
+        return askKnowledge(question, null, null);
+    }
+
+    public AiKnowledgeData askKnowledge(String question, String productTitle, String productBrand) {
+        Object body = productTitle == null ? Map.of("question", question) : Map.of(
+                "question", question, "productTitle", productTitle, "productBrand", productBrand);
         AiKnowledgeResponse response = client.post()
                 .uri("/api/knowledge/ask")
-                .body(Map.of("question", question))
+                .body(body)
                 .retrieve()
                 .body(AiKnowledgeResponse.class);
 
@@ -223,6 +229,9 @@ public class AiClient {
 
             if (!chunkIds.add(source.chunkId())) {
                 throw new RestClientException("Python返回了重复的知识引用");
+            }
+            if (productTitle != null && !source.document().startsWith(productTitle + " · 资料版本 ")) {
+                throw new RestClientException("Python资料引用与所选商品不一致");
             }
         }
 

@@ -1,6 +1,7 @@
 **
 !Dockerfile
 !requirements.txt
+!requirements-api.txt
 !requirements-embedding.txt
 !*.py
 !knowledge/

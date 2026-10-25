@@ -117,9 +117,9 @@
     image.src = /鞋/.test(p.title) ? "./shoe.svg" : /耳机/.test(p.title) ? "./headphones.svg" : /鼠标/.test(p.title) ? "./mouse.svg" : "./goods.svg";
     image.alt = p.title + "的分类示意图"; image.loading = "lazy";
     const label = el("small", "", "示意图"); n.append(image, label);
-    try { const url = new URL(p.imageUrl); if (["https:", "http:"].includes(url.protocol)) {
-      const photo = document.createElement("img"); photo.className = "photo"; photo.alt = p.title; photo.width = 500; photo.height = 500; photo.loading = "lazy"; photo.hidden = true; photo.referrerPolicy = "no-referrer";
-      photo.addEventListener("load", () => { photo.hidden = false; image.hidden = true; label.hidden = true; }, { once: true });
+    try { const local = typeof p.imageUrl === "string" && /^\/shopagent\/catalog\/[a-z][0-9]{2}\.svg$/.test(p.imageUrl); const url = local ? new URL(p.imageUrl, location.origin) : new URL(p.imageUrl); if (["https:", "http:"].includes(url.protocol)) {
+      const photo = document.createElement("img"); photo.className = "photo"; photo.alt = p.title; photo.width = 500; photo.height = 500; photo.loading = "lazy"; Object.assign(photo.style, { position: "absolute", inset: "0", opacity: "0", objectFit: local ? "contain" : "cover" }); photo.referrerPolicy = "no-referrer";
+      photo.addEventListener("load", () => { photo.style.opacity = "1"; image.hidden = true; label.hidden = true; }, { once: true });
       photo.addEventListener("error", () => photo.remove(), { once: true }); photo.src = url.href; n.append(photo);
     } } catch { /* A labeled illustration remains when no real image exists. */ }
     return n;
@@ -128,7 +128,7 @@
     const card = el("article", "goods-card"); card.dataset.productId = String(p.id);
     const copy = el("div", "goods-copy"), title = el("h3"); title.append(link(p.title, "./product.html?id=" + p.id));
     const bottom = el("div", "goods-bottom"), open = link("↗", "./product.html?id=" + p.id, "goods-open"); open.setAttribute("aria-label", "打开" + p.title + "详情");
-    bottom.append(el("span", "goods-price", "¥" + p.price), open); copy.append(el("p", "goods-brand", p.brand), title, bottom); card.append(picture(p), copy); return card;
+    bottom.append(el("span", "goods-price", "¥" + p.price), open); copy.append(el("p", "goods-brand", p.brand), title, el("p", "goods-stock", Number.isSafeInteger(p.availableQuantity) ? (p.availableQuantity > 0 ? "可售 " + p.availableQuantity + " 件" : "暂时缺货") : "库存以下单时核对为准"), bottom); card.append(picture(p), copy); return card;
   }
   const keyword = (params.get("keyword") || "").trim();
   const pageNumber = Number(params.get("page") || 1);
@@ -163,7 +163,7 @@
       if (!positive(id)) throw new ApiError("商品编号无效，请从商品列表重新选择。", 400);
       const p = await api("/api/products/" + id); if (seq !== state.detailSeq) return;
       if (!validProduct(p) || typeof p.description !== "string") throw new ApiError("商品详情不完整。");
-      state.product = p; $("product-crumb").textContent = p.title; document.title = p.title + " · ShopAgent 跳糖选物";
+      state.product = p; if ($("detail-stock")) $("detail-stock").textContent = Number.isSafeInteger(p.availableQuantity) ? (p.availableQuantity > 0 ? "当前可售 " + p.availableQuantity + " 件 · 下单时再次核对" : "暂时缺货，可稍后刷新查看") : "库存以下单时核对为准"; if ($("detail-knowledge")) $("detail-knowledge").href = "./knowledge.html?productId=" + p.id; $("product-crumb").textContent = p.title; document.title = p.title + " · ShopAgent 跳糖选物";
       $("detail-brand").textContent = p.brand; $("detail-title").textContent = p.title; $("detail-price").textContent = "¥" + p.price;
       $("detail-description").textContent = p.description || "暂无更多商品介绍。";
       $("detail-visual").replaceChildren(picture(p, false)); $("product-content").hidden = false; $("product-status").textContent = "";
@@ -182,11 +182,12 @@
     const quantity = $("detail-quantity"), existing = state.cart?.items.find(p => p.productId === state.product.id)?.quantity || 0;
     if (!state.detailDirty) quantity.value = String(existing || 1);
     $("detail-cart-hint").textContent = state.user && !state.cart ? "暂未读到购物车。请先刷新购物车核对数量，再保存。" : existing ? `购物车已有 ${existing} 件，保存后将设为上方的最终总数量。` : "保存时，将此商品的购物车数量设为上面的最终总数量。";
-    const locked = state.detailBusy || state.authLoading || state.cartLoading || !!state.user && !state.cart;
+    const soldOut = state.product.availableQuantity === 0;
+    const locked = soldOut || state.detailBusy || state.authLoading || state.cartLoading || !!state.user && !state.cart;
     $("detail-save").disabled = locked; quantity.disabled = locked;
     $("quantity-minus").disabled = locked || quantity.valueAsNumber <= 1;
     $("quantity-plus").disabled = locked || quantity.valueAsNumber >= 99;
-    $("detail-save").textContent = state.detailBusy ? "正在保存…" : state.authLoading ? "正在确认登录…" : state.user ? "放入购物车" : "登录后放入购物车";
+    $("detail-save").textContent = soldOut ? "暂时缺货" : state.detailBusy ? "正在保存…" : state.authLoading ? "正在确认登录…" : state.user ? "放入购物车" : "登录后放入购物车";
   }
   function validCart(data) { return data && Array.isArray(data.items) && Number.isSafeInteger(data.totalQuantity) && price(data.totalAmount) && data.items.every(item => positive(item.productId) && typeof item.title === "string" && Number.isInteger(item.quantity) && item.quantity >= 1 && item.quantity <= 99 && typeof item.available === "boolean" && price(item.subtotal) && (item.available ? typeof item.brand === "string" && price(item.price) : (item.brand === null || typeof item.brand === "string") && (item.price === null || price(item.price)))); }
   async function loadCart() {
@@ -272,10 +273,32 @@
     if (keyword) { $("search-summary").hidden = false; $("search-summary").append(document.createTextNode("正在查找：“" + keyword + "”"), link("清除搜索", "./products.html")); }
   }
   if (page === "knowledge") {
-    const question = $("knowledge-question"), form = $("knowledge-form"); let busy = false;
+    const question = $("knowledge-question"), form = $("knowledge-form"), productSelect = $("knowledge-product"); let busy = false;
+    async function loadKnowledgeProducts() {
+      try {
+        const catalog = await api("/api/products?page=1&size=50");
+        if (!Array.isArray(catalog.items)) throw new ApiError("商品列表格式不正确。");
+        const products = catalog.items.filter(validProduct);
+        const selectedId = Number(params.get("productId"));
+        if (positive(selectedId) && !products.some(p => p.id === selectedId)) {
+          const selected = await api("/api/products/" + selectedId);
+          if (validProduct(selected)) products.unshift(selected);
+        }
+        for (const p of products) {
+          const option = document.createElement("option"); option.value = String(p.id); option.textContent = p.title;
+          productSelect.append(option);
+        }
+        if (positive(selectedId)) productSelect.value = String(selectedId);
+        $("knowledge-product-help").textContent = "按所选商品查资料；未选择时，请在问题中写明型号。";
+      } catch (error) {
+        $("knowledge-product-help").textContent = "商品列表暂未加载，可在问题中写明型号（如 E02）提问。";
+      }
+    }
+    productSelect.addEventListener("change", () => { $("knowledge-result").hidden = true; $("knowledge-feedback").textContent = ""; });
+    loadKnowledgeProducts();
     const validText = (value, limit) => typeof value === "string" && value.trim().length > 0 && value.length <= limit;
     function controls() {
-      question.disabled = busy; $("knowledge-submit").disabled = busy;
+      question.disabled = busy; productSelect.disabled = busy; $("knowledge-submit").disabled = busy;
       $("knowledge-submit").textContent = busy ? "正在查找资料…" : "查资料，找答案";
       $("knowledge-question-count").textContent = question.value.length + " / 1000";
       form.setAttribute("aria-busy", String(busy));
@@ -305,14 +328,14 @@
     }
     question.addEventListener("input", () => { question.setCustomValidity(""); controls(); });
     question.addEventListener("keydown", e => { if (!e.isComposing && (e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); form.requestSubmit(); } });
-    document.querySelectorAll("[data-knowledge-question]").forEach(n => n.addEventListener("click", () => { if (!busy) { question.value = n.dataset.knowledgeQuestion; question.setCustomValidity(""); controls(); question.focus(); } }));
+    document.querySelectorAll("[data-knowledge-question]").forEach(n => n.addEventListener("click", () => { if (!busy) { productSelect.value = ""; $("knowledge-result").hidden = true; question.value = n.dataset.knowledgeQuestion; question.setCustomValidity(""); controls(); question.focus(); } }));
     form.addEventListener("submit", async e => {
       e.preventDefault(); if (busy) return; const text = question.value.trim();
       if (!text || text.length > 1000) { question.setCustomValidity("请输入1～1000个字符的问题。"); question.reportValidity(); return; }
       busy = true; controls(); $("knowledge-result").hidden = true; $("knowledge-sources").replaceChildren();
       $("knowledge-feedback").textContent = "正在检索资料并生成回答，请稍候。"; $("knowledge-feedback").classList.remove("error-text");
       try {
-        const data = await api("/api/assistant/knowledge", { method: "POST", body: { question: text }, timeoutMs: 35000 });
+        const data = await api("/api/assistant/knowledge", { method: "POST", body: { question: text, ...(productSelect.value ? { productId: Number(productSelect.value) } : {}) }, timeoutMs: 35000 });
         validateKnowledge(data); renderKnowledge(data, text); $("knowledge-feedback").textContent = "";
       } catch (err) { $("knowledge-feedback").textContent = err.message + " 问题已保留；确认服务恢复后，再手动提问。"; $("knowledge-feedback").classList.add("error-text"); }
       finally { busy = false; controls(); }

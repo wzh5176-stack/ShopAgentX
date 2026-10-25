@@ -24,6 +24,7 @@ from intent_schema import IntentRequest
 from intent_service import extract_intent
 
 from knowledge_service import answer_knowledge
+from knowledge_schema import KnowledgeRequest
 
 from conversation_schema import ConversationIntentRequest
 from conversation_service import extract_conversation_intent
@@ -123,9 +124,9 @@ def ask(request: AskRequest):
 
 
 @app.post("/api/knowledge/ask")
-def knowledge_ask(request: IntentRequest):
+def knowledge_ask(request: KnowledgeRequest):
     try:
-        result = answer_knowledge(request.question.strip())
+        result = answer_knowledge(request.question.strip(), request.productTitle, request.productBrand)
     except (httpx.HTTPError, OSError, ValueError, KeyError, IndexError, TypeError):
         logger.exception("知识问答失败")
         return JSONResponse(

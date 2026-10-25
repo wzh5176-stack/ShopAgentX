@@ -1,4 +1,18 @@
 from pydantic import BaseModel, Field, StrictBool
+from pydantic import ConfigDict, model_validator
+from intent_schema import IntentRequest
+
+
+class KnowledgeRequest(IntentRequest):
+    model_config = ConfigDict(extra="forbid")
+    productTitle: str | None = Field(default=None, min_length=1, max_length=200)
+    productBrand: str | None = Field(default=None, min_length=1, max_length=100)
+
+    @model_validator(mode="after")
+    def validate_identity(self):
+        if (self.productTitle is None) != (self.productBrand is None):
+            raise ValueError("商品名称与品牌必须同时提供")
+        return self
 
 
 class KnowledgeDraft(BaseModel):

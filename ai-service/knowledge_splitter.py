@@ -1,9 +1,12 @@
 from knowledge_loader import load_knowledge
 
 
-def split_knowledge(text: str) -> list[dict[str, str]]:
+def split_knowledge(text: str, *, key: str = "demo_earphone_guide", source: str = "demo_earphone_guide.md",
+                    title: str | None = None, version: str | None = None) -> list[dict[str, str]]:
     parts = text.split("\n## ")
-    document = parts[0].strip()
+    document = title or parts[0].strip()
+    if version:
+        document += " · 资料版本 " + version + " · 虚构演示"
     chunks = []
 
     for number, part in enumerate(parts[1:], start=1):
@@ -13,9 +16,12 @@ def split_knowledge(text: str) -> list[dict[str, str]]:
         if not content:
             continue
 
+        if len(content) > 5000:
+            raise ValueError("资料小节过长，请先拆分")
         chunks.append({
-            "id": f"demo_earphone_guide:{number}",
-            "source": "demo_earphone_guide.md",
+            "id": f"{key}:{number}",
+            "source": source,
+            "product_key": key,
             "document": document,
             "section": section.strip(),
             "content": content

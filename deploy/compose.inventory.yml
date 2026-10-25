@@ -1,0 +1,8 @@
+# Additive release override. No new data volume and no changes to payment or session secrets.
+services:
+  backend-a:
+    image: shopagent-backend:inventory-20261025
+  backend-b:
+    image: shopagent-backend:inventory-20261025
+  ai:
+    image: shopagent-ai:inventory-20261025

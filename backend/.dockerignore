@@ -3,3 +3,5 @@
 !target/
 target/**
 !target/shopagent-backend-1.0-SNAPSHOT.jar
+!certificates/
+!certificates/windows-roots.pem

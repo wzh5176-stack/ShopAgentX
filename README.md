@@ -1,6 +1,6 @@
 # ShopAgent · 跳糖选物
 
-2026-10-24更新：交易新版已部署到本地VMware Linux，入口 http://127.0.0.1:8080/shopagent/home.html 。原库备份并隔离恢复验证后增量升级到12表，双Java/Nginx/Redis/MySQL/AI共6容器健康，运行、备份、回退及沙箱验收边界见[新版运行说明](docs/TRADE_DEPLOYMENT.md)。临时通知隧道有会话限制，不能作为生产固定域名；Linux未代付新单，真实官方待付款主动关单仍未实测。下方早期“Linux仍首版”是历史进度。
+交易新版已完成本地VMware Linux部署验收，入口 http://127.0.0.1:8080/shopagent/home.html 。原库备份并隔离恢复验证后增量升级到12表；部署验收时双Java/Nginx/Redis/MySQL/AI共6容器健康，此记录不代表服务当前正在运行。运行、备份、回退及沙箱验收边界见[新版运行说明](docs/TRADE_DEPLOYMENT.md)。临时通知隧道有会话限制，不能作为生产固定域名；Linux未代付新单，真实官方待付款主动关单仍未实测。
 
 商品浏览、购物车与AI导购结合的学习实践项目。Java负责可信业务与数据，Python负责模型和检索，网页提供商品浏览、多轮聊天、资料问答和人工确认操作。
 
@@ -8,19 +8,25 @@
 
 ## 第二版交易扩展进展
 
-2026-10-24本机后端已完成地址、订单库存和本地模拟支付：可信核价/幂等快照、本人列表详情、取消与自动超时、模拟成功/失败重试、持久结果回执、重启与后台查单补偿。最终构建369项技术检查全部通过，见[模拟支付验收](docs/MOCK_PAYMENT_ACCEPTANCE.md)及[本地开关与接口](docs/MOCK_PAYMENT_USAGE.md)。官方付款入口已通过[96项受控验收](docs/ALIPAY_CHECKOUT_ACCEPTANCE.md)，查单与成功结算已通过[验收](docs/ALIPAY_QUERY_ACCEPTANCE.md)，关单及取消超时协调通过[同构建432项检查](docs/ALIPAY_CLOSE_ACCEPTANCE.md)；[通知验签、官方补偿与交易页面已集中验收](docs/TRADE_COMPLETION_ACCEPTANCE.md)，下一由用户手动进行真实沙箱联调，Linux迁移随后完成，现有Linux演示栈仍是首版。下方功能/运行结构以首版成果为主。
+本机后端已完成地址、订单库存和本地模拟支付：可信核价/幂等快照、本人列表详情、取消与自动超时、模拟成功/失败重试、持久结果回执、重启与后台查单补偿。历史技术验收见[模拟支付验收](docs/MOCK_PAYMENT_ACCEPTANCE.md)、[官方付款入口](docs/ALIPAY_CHECKOUT_ACCEPTANCE.md)、[查单结算](docs/ALIPAY_QUERY_ACCEPTANCE.md)、[关单协调](docs/ALIPAY_CLOSE_ACCEPTANCE.md)与[通知及交易页面](docs/TRADE_COMPLETION_ACCEPTANCE.md)。真实沙箱付款通知、漏通知补偿和未建交易的过期回收已验证，交易新版已增量部署Linux；真实待付款主动官方关单仍待验。各阶段重叠检查不相加作为总测试数。
+
+2026-10-25新增标准自动化回归、隔离MySQL事务/并发测试及GitHub Actions配置，使用说明见[自动化回归](docs/REGRESSION.md)。SQL历史分类、指纹与空库结构基线见[数据库迁移约定](backend/db/README.md)。
+
+2026-10-25新增36款逐型号演示商品与说明书，资料问答可从详情页选择商品，并在该型号内检索、返回带版本原文。管理员补货、库存展示、导购缺货过滤及标准回归已合并升级至现有Linux环境；维护与验收见[库存闭环](docs/INVENTORY_CLOSURE.md)和[商品资料与RAG](docs/CATALOG_RAG.md)。
 
 ## 已实现
 
 - 商品：公开列表、关键词搜索、分页与详情；管理员新增、修改、上下架和逻辑删除。
+- 库存：管理员幂等补货与不可覆盖的操作记录、当前可售数量展示、缺货导购过滤；下单事务继续核对并预占库存。
 - 账号：注册、登录、退出、角色授权和CSRF保护；用户会话及购物车按身份隔离。
 - 导购：从真实商品候选中推荐、预算条件、多轮上下文、流式输出及消息历史。
-- 资料问答：本地BGE向量化与FAISS检索、资料引用、无依据场景处理；K1资料为虚构教学样例。
+- 资料问答：36款演示商品资料及独立K1样例，本地BGE与FAISS按型号检索、版本原文引用、型号冲突澄清与无依据处理。商品参数和图片明确为虚构演示。
 - 购物车：常规读取/设置总数量/移除；自然语言生成待确认操作，确认后由Java执行，支持操作状态和历史恢复。
+- 交易：收货地址、服务端核价、库存预占、幂等下单、订单历史、取消与超时回收；本地模拟支付及支付宝官方沙箱。
 - 部署：Docker Compose组织MySQL、Redis、Python、双Java实例与Nginx；Spring Session共享登录会话。
 - 演练：单Java实例停止与恢复；独立RedisCluster三主三从、分片复制与主故障提升；业务SQL备份及隔离恢复。
 
-首版演示不含订单支付、地址物流、Android客户端或LangGraph图编排；第二版本机进展见上节。RedisCluster是独立实验，网站共享会话仍使用原单节点Redis；单VM部署保留基础设施单点，未做公网生产上线。
+当前不含物流履约、退款、正式收款、Android客户端或LangGraph图编排。RedisCluster是独立实验，网站共享会话仍使用原单节点Redis；单VM部署保留基础设施单点，未做公网生产上线。
 
 ## 技术组成
 
@@ -66,7 +72,7 @@ flowchart LR
 | docs | 设计、接口、手动教学、验收和复盘记录 |
 | PROJECT_STATE.md | 长聊恢复时的最新进度 |
 
-SQL编号包含迁移和授权步骤，执行时应按[数据库设计](docs/DATABASE_DESIGN.md)与对应教学步骤确认目标，不在已有库重放整个目录。
+SQL编号包含迁移和授权步骤，执行时应按[数据库设计](docs/DATABASE_DESIGN.md)与[迁移约定](backend/db/README.md)确认目标，不在已有库重放整个目录；结构基线只用于空库。
 
 ## 已配置本机环境的启动
 

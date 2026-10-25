@@ -22,3 +22,5 @@ dialog{padding:0;border:1px solid var(--ink);border-radius:var(--radius);width:m
 @media(max-width:720px){.store-nav{overflow-x:auto;justify-content:flex-start;gap:22px;scrollbar-width:thin}.store-nav>a{flex:0 0 auto}}
 
 .guide-promo>div>p{font-size:16px;line-height:1.85;margin-block:20px}.guide-example>p{margin:0!important;font-size:13px!important}.guide-promo>div>p+ .primary{margin-top:6px}
+
+.goods-stock{font-size:14px;color:var(--muted);margin-top:10px}.inventory-heading{margin-top:32px}#inventory-product,#inventory-quantity,#inventory-reason{display:block;width:100%;font:inherit;min-height:48px;margin:8px 0 20px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--ground)}#inventory-history article{padding:16px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}

@@ -109,6 +109,10 @@ public class ProductService {
 
         String normalized = imageUrl.trim();
 
+        if (normalized.matches("/shopagent/catalog/[a-z][0-9]{2}\\.svg")) {
+            return normalized;
+        }
+
         URI uri;
         try {
             uri = URI.create(normalized);
@@ -252,6 +256,7 @@ public class ProductService {
         if (maxPrice != null) {
             query.le("price", maxPrice);
         }
+        query.inSql("id", "SELECT product_id FROM product_inventory WHERE available_quantity > 0");
         query.orderByAsc("id");
 
         Page<Product> pageRequest = new Page<>(1, 20, false);

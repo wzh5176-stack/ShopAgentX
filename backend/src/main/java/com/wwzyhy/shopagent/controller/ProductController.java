@@ -3,6 +3,7 @@ package com.wwzyhy.shopagent.controller;
 import com.wwzyhy.shopagent.dto.ProductDetailResponse;
 import com.wwzyhy.shopagent.entity.Product;
 import com.wwzyhy.shopagent.service.ProductService;
+import com.wwzyhy.shopagent.service.InventoryService;
 import java.math.RoundingMode;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProductController {
 
     private final ProductService productService;
+    private final InventoryService inventoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, InventoryService inventoryService) {
         this.productService = productService;
+        this.inventoryService = inventoryService;
     }
 
     @GetMapping("/{id}")
@@ -59,7 +62,8 @@ public class ProductController {
                         .setScale(2, RoundingMode.UNNECESSARY)
                         .toPlainString(),
                 product.getImageUrl(),
-                product.getDescription()
+                product.getDescription(),
+                inventoryService.availableFor(List.of(product.getId())).getOrDefault(product.getId(), 0)
         );
 
         return ResponseEntity.ok(Map.of("data", data));
@@ -76,6 +80,7 @@ public class ProductController {
                 productService.findOnSalePage(page, size, keyword);
 
         List<ProductSummaryResponse> items = new ArrayList<>();
+        Map<Long, Integer> stock = inventoryService.availableFor(result.getRecords().stream().map(Product::getId).toList());
 
         for (Product product : result.getRecords()) {
             items.add(new ProductSummaryResponse(
@@ -85,7 +90,8 @@ public class ProductController {
                     product.getPrice()
                             .setScale(2, RoundingMode.UNNECESSARY)
                             .toPlainString(),
-                    product.getImageUrl()
+                    product.getImageUrl(),
+                    stock.getOrDefault(product.getId(), 0)
             ));
         }
 
