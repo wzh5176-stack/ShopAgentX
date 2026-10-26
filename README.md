@@ -1,5 +1,7 @@
 # ShopAgent · 跳糖选物
 
+项目仓库：[wzh5176-stack/ShopAgentX](https://github.com/wzh5176-stack/ShopAgentX)。本仓库保留原有开发历史及MIT LICENSE，迁移范围见[仓库迁移说明](docs/GITHUB_MIGRATION.md)。
+
 交易新版已完成本地VMware Linux部署验收，入口 http://127.0.0.1:8080/shopagent/home.html 。原库备份并隔离恢复验证后增量升级到12表；部署验收时双Java/Nginx/Redis/MySQL/AI共6容器健康，此记录不代表服务当前正在运行。运行、备份、回退及沙箱验收边界见[新版运行说明](docs/TRADE_DEPLOYMENT.md)。临时通知隧道有会话限制，不能作为生产固定域名；Linux未代付新单，真实官方待付款主动关单仍未实测。
 
 商品浏览、购物车与AI导购结合的学习实践项目。Java负责可信业务与数据，Python负责模型和检索，网页提供商品浏览、多轮聊天、资料问答和人工确认操作。
